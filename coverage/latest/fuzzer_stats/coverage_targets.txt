@@ -1,2 +1,2 @@
-fuzz_board_constructor
 fuzz_board_push
+fuzz_board_constructor
