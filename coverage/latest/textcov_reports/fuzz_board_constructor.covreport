@@ -14,7 +14,7 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
    20|  3.02k|            if (i == fen.size() || fen[i] == ' ') {
   ------------------
   |  Branch (20:17): [True: 109, False: 2.91k]
-  |  Branch (20:36): [True: 338, False: 2.58k]
+  |  Branch (20:36): [True: 338, False: 2.57k]
   ------------------
    21|    447|                if (fieldCount >= 6) throw std::invalid_argument("FEN has too many fields");
   ------------------
@@ -57,7 +57,7 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
    41|  1.01k|                } else if (c >= '1' && c <= '8') {
   ------------------
   |  Branch (41:28): [True: 1.00k, False: 5]
-  |  Branch (41:40): [True: 611, False: 396]
+  |  Branch (41:40): [True: 611, False: 395]
   ------------------
    42|    611|                    fileIdx += static_cast<std::size_t>(c - '0');
    43|    611|                    if (fileIdx > 8) throw std::invalid_argument("FEN rank exceeds 8 squares");
@@ -65,31 +65,31 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
   |  Branch (43:25): [True: 1, False: 610]
   ------------------
    44|    611|                } else {
-   45|    401|                    if (detail::PIECE_TYPE_CHARS.find(c) == std::string_view::npos)
+   45|    400|                    if (detail::PIECE_TYPE_CHARS.find(c) == std::string_view::npos)
   ------------------
-  |  Branch (45:25): [True: 6, False: 395]
+  |  Branch (45:25): [True: 6, False: 394]
   ------------------
    46|      6|                        throw std::invalid_argument(
    47|      6|                            std::string("FEN contains invalid piece character: ") + c);
-   48|    395|                    if (fileIdx >= 8) throw std::invalid_argument("FEN rank exceeds 8 squares");
+   48|    394|                    if (fileIdx >= 8) throw std::invalid_argument("FEN rank exceeds 8 squares");
   ------------------
-  |  Branch (48:25): [True: 2, False: 393]
+  |  Branch (48:25): [True: 2, False: 392]
   ------------------
    49|       |
-   50|    393|                    Piece p(c);
-   51|    393|                    Square sq(static_cast<uint8_t>(rankIdx), static_cast<uint8_t>(fileIdx));
-   52|    393|                    uint64_t bit = 1ULL << static_cast<uint8_t>(sq);
+   50|    392|                    Piece p(c);
+   51|    392|                    Square sq(static_cast<uint8_t>(rankIdx), static_cast<uint8_t>(fileIdx));
+   52|    392|                    uint64_t bit = 1ULL << static_cast<uint8_t>(sq);
    53|       |
-   54|    393|                    if (p.isBlack())
+   54|    392|                    if (p.isBlack())
   ------------------
-  |  Branch (54:25): [True: 203, False: 190]
+  |  Branch (54:25): [True: 202, False: 190]
   ------------------
-   55|    203|                        blackBitboards[p.type()] |= bit;
+   55|    202|                        blackBitboards[p.type()] |= bit;
    56|    190|                    else
    57|    190|                        whiteBitboards[p.type()] |= bit;
    58|       |
-   59|    393|                    ++fileIdx;
-   60|    393|                }
+   59|    392|                    ++fileIdx;
+   60|    392|                }
    61|  1.48k|            }
    62|       |
    63|     88|            if (fileIdx != 8)
@@ -436,28 +436,28 @@ _ZNK5aleph5chess5Board12getOccupancyEv:
    16|     10|    std::uint64_t Board::getOccupancy() const { return getWhiteOccupancy() | getBlackOccupancy(); }
 
 _ZN5aleph5chess5PieceC2Ec:
-   67|    393|            constexpr explicit Piece(char c) : data(0) {
-   68|    393|                auto pos = detail::PIECE_TYPE_CHARS.find(c);
+   67|    392|            constexpr explicit Piece(char c) : data(0) {
+   68|    392|                auto pos = detail::PIECE_TYPE_CHARS.find(c);
    69|       |                DEBUG_ASSERT(pos != std::string_view::npos);
-   70|    393|                data = static_cast<uint8_t>(pos);
-   71|    393|            }
+   70|    392|                data = static_cast<uint8_t>(pos);
+   71|    392|            }
 _ZNK5aleph5chess5Piece7isBlackEv:
-   79|    393|            [[nodiscard]] constexpr inline bool isBlack() const noexcept { return data >= 6; }
+   79|    392|            [[nodiscard]] constexpr inline bool isBlack() const noexcept { return data >= 6; }
 _ZNK5aleph5chess5Piece4typeEv:
-   74|    393|            [[nodiscard]] constexpr inline PieceType type() const noexcept {
-   75|    393|                return data == NONE ? NONE : static_cast<PieceType>(data % 6);
+   74|    392|            [[nodiscard]] constexpr inline PieceType type() const noexcept {
+   75|    392|                return data == NONE ? NONE : static_cast<PieceType>(data % 6);
   ------------------
-  |  Branch (75:24): [True: 0, False: 393]
+  |  Branch (75:24): [True: 0, False: 392]
   ------------------
-   76|    393|            }
+   76|    392|            }
 
 _ZN5aleph5chess6SquareC2Ehh:
-   56|    396|            constexpr Square(std::uint8_t r, std::uint8_t f) : data(r * 8 + f) {
-   57|    396|                DEBUG_ASSERT(r < 8);
+   56|    395|            constexpr Square(std::uint8_t r, std::uint8_t f) : data(r * 8 + f) {
+   57|    395|                DEBUG_ASSERT(r < 8);
    58|       |                DEBUG_ASSERT(f < 8);
-   59|    396|            }
+   59|    395|            }
 _ZNK5aleph5chess6SquarecvhEv:
-   82|    396|            constexpr inline operator std::uint8_t() const noexcept { return data; }
+   82|    395|            constexpr inline operator std::uint8_t() const noexcept { return data; }
 
 LLVMFuzzerTestOneInput:
    15|    109|extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
