@@ -1,218 +1,218 @@
 
 
 _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
-   13|    117|        : whiteBitboards{}, blackBitboards{}, metadata(0), _zobristHash(0), _checkers(0) {
+   13|    124|        : whiteBitboards{}, blackBitboards{}, metadata(0), _zobristHash(0), _checkers(0) {
    14|       |        // --- Split FEN into fields ---
-   15|    117|        std::array<std::string_view, 6> fields;
-   16|    117|        std::size_t fieldCount = 0;
-   17|    117|        std::size_t start      = 0;
+   15|    124|        std::array<std::string_view, 6> fields;
+   16|    124|        std::size_t fieldCount = 0;
+   17|    124|        std::size_t start      = 0;
    18|       |
-   19|  3.70k|        for (std::size_t i = 0; i <= fen.size(); ++i) {
+   19|  5.20k|        for (std::size_t i = 0; i <= fen.size(); ++i) {
   ------------------
-  |  Branch (19:33): [True: 3.58k, False: 116]
+  |  Branch (19:33): [True: 5.07k, False: 123]
   ------------------
-   20|  3.58k|            if (i == fen.size() || fen[i] == ' ') {
+   20|  5.07k|            if (i == fen.size() || fen[i] == ' ') {
   ------------------
-  |  Branch (20:17): [True: 117, False: 3.47k]
-  |  Branch (20:36): [True: 370, False: 3.10k]
+  |  Branch (20:17): [True: 124, False: 4.95k]
+  |  Branch (20:36): [True: 397, False: 4.55k]
   ------------------
-   21|    487|                if (fieldCount >= 6) throw std::invalid_argument("FEN has too many fields");
+   21|    521|                if (fieldCount >= 6) throw std::invalid_argument("FEN has too many fields");
   ------------------
-  |  Branch (21:21): [True: 1, False: 486]
+  |  Branch (21:21): [True: 1, False: 520]
   ------------------
-   22|    486|                fields[fieldCount++] = fen.substr(start, i - start);
-   23|    486|                start                = i + 1;
-   24|    486|            }
-   25|  3.58k|        }
-   26|    116|        if (fieldCount < 4)
+   22|    520|                fields[fieldCount++] = fen.substr(start, i - start);
+   23|    520|                start                = i + 1;
+   24|    520|            }
+   25|  5.07k|        }
+   26|    123|        if (fieldCount < 4)
   ------------------
-  |  Branch (26:13): [True: 9, False: 107]
+  |  Branch (26:13): [True: 9, False: 114]
   ------------------
    27|      9|            throw std::invalid_argument("FEN has too few fields (minimum 4 required)");
    28|       |
    29|       |        // --- Field 1: Piece placement ---
-   30|    107|        {
-   31|    107|            std::size_t rankIdx = 7;  // FEN starts from rank 8 (index 7)
-   32|    107|            std::size_t fileIdx = 0;
+   30|    114|        {
+   31|    114|            std::size_t rankIdx = 7;  // FEN starts from rank 8 (index 7)
+   32|    114|            std::size_t fileIdx = 0;
    33|       |
-   34|  1.64k|            for (char c : fields[0]) {
+   34|  1.79k|            for (char c : fields[0]) {
   ------------------
-  |  Branch (34:25): [True: 1.64k, False: 96]
+  |  Branch (34:25): [True: 1.79k, False: 103]
   ------------------
-   35|  1.64k|                if (c == '/') {
+   35|  1.79k|                if (c == '/') {
   ------------------
-  |  Branch (35:21): [True: 528, False: 1.11k]
+  |  Branch (35:21): [True: 577, False: 1.21k]
   ------------------
-   36|    528|                    if (fileIdx != 8)
+   36|    577|                    if (fileIdx != 8)
   ------------------
-  |  Branch (36:25): [True: 1, False: 527]
+  |  Branch (36:25): [True: 1, False: 576]
   ------------------
    37|      1|                        throw std::invalid_argument("FEN rank does not sum to 8 squares");
-   38|    527|                    if (rankIdx == 0) throw std::invalid_argument("FEN has too many ranks");
+   38|    576|                    if (rankIdx == 0) throw std::invalid_argument("FEN has too many ranks");
   ------------------
-  |  Branch (38:25): [True: 1, False: 526]
+  |  Branch (38:25): [True: 1, False: 575]
   ------------------
-   39|    526|                    --rankIdx;
-   40|    526|                    fileIdx = 0;
-   41|  1.11k|                } else if (c >= '1' && c <= '8') {
+   39|    575|                    --rankIdx;
+   40|    575|                    fileIdx = 0;
+   41|  1.21k|                } else if (c >= '1' && c <= '8') {
   ------------------
-  |  Branch (41:28): [True: 1.10k, False: 5]
-  |  Branch (41:40): [True: 687, False: 422]
+  |  Branch (41:28): [True: 1.21k, False: 5]
+  |  Branch (41:40): [True: 758, False: 452]
   ------------------
-   42|    687|                    fileIdx += static_cast<std::size_t>(c - '0');
-   43|    687|                    if (fileIdx > 8) throw std::invalid_argument("FEN rank exceeds 8 squares");
+   42|    758|                    fileIdx += static_cast<std::size_t>(c - '0');
+   43|    758|                    if (fileIdx > 8) throw std::invalid_argument("FEN rank exceeds 8 squares");
   ------------------
-  |  Branch (43:25): [True: 1, False: 686]
+  |  Branch (43:25): [True: 1, False: 757]
   ------------------
-   44|    687|                } else {
-   45|    427|                    if (detail::PIECE_TYPE_CHARS.find(c) == std::string_view::npos)
+   44|    758|                } else {
+   45|    457|                    if (detail::PIECE_TYPE_CHARS.find(c) == std::string_view::npos)
   ------------------
-  |  Branch (45:25): [True: 6, False: 421]
+  |  Branch (45:25): [True: 6, False: 451]
   ------------------
    46|      6|                        throw std::invalid_argument(
    47|      6|                            std::string("FEN contains invalid piece character: ") + c);
-   48|    421|                    if (fileIdx >= 8) throw std::invalid_argument("FEN rank exceeds 8 squares");
+   48|    451|                    if (fileIdx >= 8) throw std::invalid_argument("FEN rank exceeds 8 squares");
   ------------------
-  |  Branch (48:25): [True: 2, False: 419]
+  |  Branch (48:25): [True: 2, False: 449]
   ------------------
    49|       |
-   50|    419|                    Piece p(c);
-   51|    419|                    Square sq(static_cast<uint8_t>(rankIdx), static_cast<uint8_t>(fileIdx));
-   52|    419|                    uint64_t bit = 1ULL << static_cast<uint8_t>(sq);
+   50|    449|                    Piece p(c);
+   51|    449|                    Square sq(static_cast<uint8_t>(rankIdx), static_cast<uint8_t>(fileIdx));
+   52|    449|                    uint64_t bit = 1ULL << static_cast<uint8_t>(sq);
    53|       |
-   54|    419|                    if (p.isBlack())
+   54|    449|                    if (p.isBlack())
   ------------------
-  |  Branch (54:25): [True: 217, False: 202]
+  |  Branch (54:25): [True: 235, False: 214]
   ------------------
-   55|    217|                        blackBitboards[p.type()] |= bit;
-   56|    202|                    else
-   57|    202|                        whiteBitboards[p.type()] |= bit;
+   55|    235|                        blackBitboards[p.type()] |= bit;
+   56|    214|                    else
+   57|    214|                        whiteBitboards[p.type()] |= bit;
    58|       |
-   59|    419|                    ++fileIdx;
-   60|    419|                }
-   61|  1.64k|            }
+   59|    449|                    ++fileIdx;
+   60|    449|                }
+   61|  1.79k|            }
    62|       |
-   63|     96|            if (fileIdx != 8)
+   63|    103|            if (fileIdx != 8)
   ------------------
-  |  Branch (63:17): [True: 16, False: 80]
+  |  Branch (63:17): [True: 16, False: 87]
   ------------------
    64|     16|                throw std::invalid_argument("FEN final rank does not sum to 8 squares");
-   65|     80|            if (rankIdx != 0) throw std::invalid_argument("FEN has too few ranks");
+   65|     87|            if (rankIdx != 0) throw std::invalid_argument("FEN has too few ranks");
   ------------------
-  |  Branch (65:17): [True: 10, False: 70]
+  |  Branch (65:17): [True: 10, False: 77]
   ------------------
-   66|     80|        }
+   66|     87|        }
    67|       |
    68|       |        // --- Piece validity checks ---
-   69|     70|        {
-   70|     70|            if (platform::popcnt(whiteBitboards[KING]) != 1)
+   69|     77|        {
+   70|     77|            if (platform::popcnt(whiteBitboards[KING]) != 1)
   ------------------
-  |  Branch (70:17): [True: 1, False: 69]
+  |  Branch (70:17): [True: 1, False: 76]
   ------------------
    71|      1|                throw std::invalid_argument("FEN must have exactly one white king");
-   72|     69|            if (platform::popcnt(blackBitboards[KING]) != 1)
+   72|     76|            if (platform::popcnt(blackBitboards[KING]) != 1)
   ------------------
-  |  Branch (72:17): [True: 1, False: 68]
+  |  Branch (72:17): [True: 1, False: 75]
   ------------------
    73|      1|                throw std::invalid_argument("FEN must have exactly one black king");
    74|       |
-   75|     68|            if (platform::popcnt(whiteBitboards[PAWN]) > 8)
+   75|     75|            if (platform::popcnt(whiteBitboards[PAWN]) > 8)
   ------------------
-  |  Branch (75:17): [True: 0, False: 68]
+  |  Branch (75:17): [True: 0, False: 75]
   ------------------
    76|      0|                throw std::invalid_argument("FEN has too many white pawns");
-   77|     68|            if (platform::popcnt(blackBitboards[PAWN]) > 8)
+   77|     75|            if (platform::popcnt(blackBitboards[PAWN]) > 8)
   ------------------
-  |  Branch (77:17): [True: 1, False: 67]
+  |  Branch (77:17): [True: 1, False: 74]
   ------------------
    78|      1|                throw std::invalid_argument("FEN has too many black pawns");
    79|       |
-   80|     67|            constexpr uint64_t RANK_1 = 0x00000000000000FFULL;
-   81|     67|            constexpr uint64_t RANK_8 = 0xFF00000000000000ULL;
-   82|     67|            if (whiteBitboards[PAWN] & (RANK_1 | RANK_8))
+   80|     74|            constexpr uint64_t RANK_1 = 0x00000000000000FFULL;
+   81|     74|            constexpr uint64_t RANK_8 = 0xFF00000000000000ULL;
+   82|     74|            if (whiteBitboards[PAWN] & (RANK_1 | RANK_8))
   ------------------
-  |  Branch (82:17): [True: 1, False: 66]
+  |  Branch (82:17): [True: 1, False: 73]
   ------------------
    83|      1|                throw std::invalid_argument("FEN has pawns on back rank");
-   84|     66|            if (blackBitboards[PAWN] & (RANK_1 | RANK_8))
+   84|     73|            if (blackBitboards[PAWN] & (RANK_1 | RANK_8))
   ------------------
-  |  Branch (84:17): [True: 1, False: 65]
+  |  Branch (84:17): [True: 1, False: 72]
   ------------------
    85|      1|                throw std::invalid_argument("FEN has pawns on back rank");
    86|       |
-   87|     65|            uint32_t whitePieces = 0;
-   88|     65|            uint32_t blackPieces = 0;
-   89|    455|            for (int i = 0; i < 6; i++) {
+   87|     72|            uint32_t whitePieces = 0;
+   88|     72|            uint32_t blackPieces = 0;
+   89|    504|            for (int i = 0; i < 6; i++) {
   ------------------
-  |  Branch (89:29): [True: 390, False: 65]
+  |  Branch (89:29): [True: 432, False: 72]
   ------------------
-   90|    390|                whitePieces += platform::popcnt(whiteBitboards[i]);
-   91|    390|                blackPieces += platform::popcnt(blackBitboards[i]);
-   92|    390|            }
-   93|     65|            if (whitePieces > 16) throw std::invalid_argument("FEN has too many white pieces");
+   90|    432|                whitePieces += platform::popcnt(whiteBitboards[i]);
+   91|    432|                blackPieces += platform::popcnt(blackBitboards[i]);
+   92|    432|            }
+   93|     72|            if (whitePieces > 16) throw std::invalid_argument("FEN has too many white pieces");
   ------------------
-  |  Branch (93:17): [True: 1, False: 64]
+  |  Branch (93:17): [True: 1, False: 71]
   ------------------
-   94|     64|            if (blackPieces > 16) throw std::invalid_argument("FEN has too many black pieces");
+   94|     71|            if (blackPieces > 16) throw std::invalid_argument("FEN has too many black pieces");
   ------------------
-  |  Branch (94:17): [True: 1, False: 63]
+  |  Branch (94:17): [True: 1, False: 70]
   ------------------
    95|       |
-   96|     63|            uint64_t allWhite = 0, allBlack = 0;
-   97|    441|            for (int i = 0; i < 6; i++) {
+   96|     70|            uint64_t allWhite = 0, allBlack = 0;
+   97|    490|            for (int i = 0; i < 6; i++) {
   ------------------
-  |  Branch (97:29): [True: 378, False: 63]
+  |  Branch (97:29): [True: 420, False: 70]
   ------------------
-   98|    378|                if (whiteBitboards[i] & allWhite)
+   98|    420|                if (whiteBitboards[i] & allWhite)
   ------------------
-  |  Branch (98:21): [True: 0, False: 378]
+  |  Branch (98:21): [True: 0, False: 420]
   ------------------
    99|      0|                    throw std::invalid_argument("FEN has overlapping white pieces");
-  100|    378|                if (blackBitboards[i] & allBlack)
+  100|    420|                if (blackBitboards[i] & allBlack)
   ------------------
-  |  Branch (100:21): [True: 0, False: 378]
+  |  Branch (100:21): [True: 0, False: 420]
   ------------------
   101|      0|                    throw std::invalid_argument("FEN has overlapping black pieces");
-  102|    378|                allWhite |= whiteBitboards[i];
-  103|    378|                allBlack |= blackBitboards[i];
-  104|    378|            }
-  105|     63|            if (allWhite & allBlack)
+  102|    420|                allWhite |= whiteBitboards[i];
+  103|    420|                allBlack |= blackBitboards[i];
+  104|    420|            }
+  105|     70|            if (allWhite & allBlack)
   ------------------
-  |  Branch (105:17): [True: 0, False: 63]
+  |  Branch (105:17): [True: 0, False: 70]
   ------------------
   106|      0|                throw std::invalid_argument("FEN has overlapping white and black pieces");
-  107|     63|        }
+  107|     70|        }
   108|       |
   109|       |        // --- Field 2: Side to move ---
-  110|     63|        {
-  111|     63|            if (fields[1] == "b")
+  110|     70|        {
+  111|     70|            if (fields[1] == "b")
   ------------------
-  |  Branch (111:17): [True: 58, False: 5]
+  |  Branch (111:17): [True: 64, False: 6]
   ------------------
-  112|     58|                metadata |= BLACK_TO_MOVE;
-  113|      5|            else if (fields[1] != "w")
+  112|     64|                metadata |= BLACK_TO_MOVE;
+  113|      6|            else if (fields[1] != "w")
   ------------------
-  |  Branch (113:22): [True: 2, False: 3]
+  |  Branch (113:22): [True: 2, False: 4]
   ------------------
   114|      2|                throw std::invalid_argument("FEN side to move must be 'w' or 'b'");
-  115|     63|        }
+  115|     70|        }
   116|       |
   117|       |        // --- Field 3: Castling rights ---
-  118|     61|        {
-  119|     61|            constexpr uint64_t WHITE_KING_START = 1ULL << static_cast<uint8_t>(Square(0, 4));
-  120|     61|            constexpr uint64_t WHITE_KS_ROOK    = 1ULL << static_cast<uint8_t>(Square(0, 7));
-  121|     61|            constexpr uint64_t WHITE_QS_ROOK    = 1ULL << static_cast<uint8_t>(Square(0, 0));
-  122|     61|            constexpr uint64_t BLACK_KING_START = 1ULL << static_cast<uint8_t>(Square(7, 4));
-  123|     61|            constexpr uint64_t BLACK_KS_ROOK    = 1ULL << static_cast<uint8_t>(Square(7, 7));
-  124|     61|            constexpr uint64_t BLACK_QS_ROOK    = 1ULL << static_cast<uint8_t>(Square(7, 0));
+  118|     68|        {
+  119|     68|            constexpr uint64_t WHITE_KING_START = 1ULL << static_cast<uint8_t>(Square(0, 4));
+  120|     68|            constexpr uint64_t WHITE_KS_ROOK    = 1ULL << static_cast<uint8_t>(Square(0, 7));
+  121|     68|            constexpr uint64_t WHITE_QS_ROOK    = 1ULL << static_cast<uint8_t>(Square(0, 0));
+  122|     68|            constexpr uint64_t BLACK_KING_START = 1ULL << static_cast<uint8_t>(Square(7, 4));
+  123|     68|            constexpr uint64_t BLACK_KS_ROOK    = 1ULL << static_cast<uint8_t>(Square(7, 7));
+  124|     68|            constexpr uint64_t BLACK_QS_ROOK    = 1ULL << static_cast<uint8_t>(Square(7, 0));
   125|       |
-  126|     61|            if (fields[2] != "-") {
+  126|     68|            if (fields[2] != "-") {
   ------------------
-  |  Branch (126:17): [True: 60, False: 1]
+  |  Branch (126:17): [True: 67, False: 1]
   ------------------
   127|    404|                for (char c : fields[2]) {
   ------------------
-  |  Branch (127:29): [True: 404, False: 51]
+  |  Branch (127:29): [True: 404, False: 58]
   ------------------
   128|    404|                    switch (c) {
   129|    198|                        case 'K':
@@ -295,106 +295,106 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
   167|      3|                                std::string("FEN castling field contains invalid character: ") + c);
   168|    404|                    }
   169|    404|                }
-  170|     60|            }
-  171|     61|        }
+  170|     67|            }
+  171|     68|        }
   172|       |
   173|       |        // --- Field 4: En passant ---
-  174|     52|        {
-  175|     52|            if (fields[3] != "-") {
+  174|     59|        {
+  175|     59|            if (fields[3] != "-") {
   ------------------
-  |  Branch (175:17): [True: 23, False: 29]
+  |  Branch (175:17): [True: 24, False: 35]
   ------------------
-  176|     23|                if (fields[3].size() != 2)
+  176|     24|                if (fields[3].size() != 2)
   ------------------
-  |  Branch (176:21): [True: 16, False: 7]
+  |  Branch (176:21): [True: 16, False: 8]
   ------------------
   177|     16|                    throw std::invalid_argument("FEN en passant field must be a square or '-'");
   178|       |
-  179|      7|                uint8_t file = static_cast<uint8_t>(fields[3][0] - 'a');
-  180|      7|                uint8_t rank = static_cast<uint8_t>(fields[3][1] - '1');
+  179|      8|                uint8_t file = static_cast<uint8_t>(fields[3][0] - 'a');
+  180|      8|                uint8_t rank = static_cast<uint8_t>(fields[3][1] - '1');
   181|       |
-  182|      7|                if (file > 7) throw std::invalid_argument("FEN en passant file is invalid");
+  182|      8|                if (file > 7) throw std::invalid_argument("FEN en passant file is invalid");
   ------------------
-  |  Branch (182:21): [True: 1, False: 6]
+  |  Branch (182:21): [True: 1, False: 7]
   ------------------
-  183|      6|                if (rank > 7) throw std::invalid_argument("FEN en passant rank is invalid");
+  183|      7|                if (rank > 7) throw std::invalid_argument("FEN en passant rank is invalid");
   ------------------
-  |  Branch (183:21): [True: 1, False: 5]
+  |  Branch (183:21): [True: 1, False: 6]
   ------------------
   184|       |
   185|       |                // En passant rank must be 2 (black to move, white just pushed) or
   186|       |                // 5 (white to move, black just pushed) — 0-indexed.
-  187|      5|                if (isBlackTurn() && rank != 2)
+  187|      6|                if (isBlackTurn() && rank != 2)
   ------------------
-  |  Branch (187:21): [True: 2, False: 3]
+  |  Branch (187:21): [True: 2, False: 4]
   |  Branch (187:38): [True: 1, False: 1]
   ------------------
   188|      1|                    throw std::invalid_argument(
   189|      1|                        "FEN en passant rank must be 3 when black is to move");
-  190|      4|                if (isWhiteTurn() && rank != 5)
+  190|      5|                if (isWhiteTurn() && rank != 5)
   ------------------
-  |  Branch (190:21): [True: 3, False: 1]
-  |  Branch (190:38): [True: 1, False: 2]
+  |  Branch (190:21): [True: 4, False: 1]
+  |  Branch (190:38): [True: 1, False: 3]
   ------------------
   191|      1|                    throw std::invalid_argument(
   192|      1|                        "FEN en passant rank must be 6 when white is to move");
   193|       |
   194|       |                // There must be a pawn on the rank it landed on after the double push.
-  195|      3|                uint64_t pawnBit = isBlackTurn() ? 1ULL << static_cast<uint8_t>(Square(3, file))
+  195|      4|                uint64_t pawnBit = isBlackTurn() ? 1ULL << static_cast<uint8_t>(Square(3, file))
   ------------------
-  |  Branch (195:36): [True: 1, False: 2]
+  |  Branch (195:36): [True: 1, False: 3]
   ------------------
-  196|      3|                                                 : 1ULL << static_cast<uint8_t>(Square(4, file));
+  196|      4|                                                 : 1ULL << static_cast<uint8_t>(Square(4, file));
   197|       |
-  198|      3|                if (isBlackTurn() && !(whiteBitboards[PAWN] & pawnBit))
+  198|      4|                if (isBlackTurn() && !(whiteBitboards[PAWN] & pawnBit))
   ------------------
-  |  Branch (198:21): [True: 1, False: 2]
+  |  Branch (198:21): [True: 1, False: 3]
   |  Branch (198:38): [True: 1, False: 0]
   ------------------
   199|      1|                    throw std::invalid_argument(
   200|      1|                        "FEN en passant square is invalid: no white pawn on expected square");
-  201|      2|                if (isWhiteTurn() && !(blackBitboards[PAWN] & pawnBit))
+  201|      3|                if (isWhiteTurn() && !(blackBitboards[PAWN] & pawnBit))
   ------------------
-  |  Branch (201:21): [True: 2, False: 0]
-  |  Branch (201:38): [True: 1, False: 1]
+  |  Branch (201:21): [True: 3, False: 0]
+  |  Branch (201:38): [True: 1, False: 2]
   ------------------
   202|      1|                    throw std::invalid_argument(
   203|      1|                        "FEN en passant square is invalid: no black pawn on expected square");
   204|       |
-  205|      1|                metadata |= EN_PASSANT_VALID;
-  206|      1|                metadata |= (file & EN_PASSANT_FILE_MASK);
-  207|      1|            }
-  208|     52|        }
+  205|      2|                metadata |= EN_PASSANT_VALID;
+  206|      2|                metadata |= (file & EN_PASSANT_FILE_MASK);
+  207|      2|            }
+  208|     59|        }
   209|       |
   210|       |        // --- Field 5: Halfmove clock (optional) ---
-  211|     30|        if (fieldCount >= 5) {
+  211|     37|        if (fieldCount >= 5) {
   ------------------
-  |  Branch (211:13): [True: 29, False: 1]
+  |  Branch (211:13): [True: 35, False: 2]
   ------------------
-  212|     29|            uint32_t halfmove = 0;
-  213|    553|            for (char c : fields[4]) {
+  212|     35|            uint32_t halfmove = 0;
+  213|  1.84k|            for (char c : fields[4]) {
   ------------------
-  |  Branch (213:25): [True: 553, False: 24]
+  |  Branch (213:25): [True: 1.84k, False: 30]
   ------------------
-  214|    553|                if (c < '0' || c > '9')
+  214|  1.84k|                if (c < '0' || c > '9')
   ------------------
-  |  Branch (214:21): [True: 2, False: 551]
-  |  Branch (214:32): [True: 3, False: 548]
+  |  Branch (214:21): [True: 2, False: 1.84k]
+  |  Branch (214:32): [True: 3, False: 1.83k]
   ------------------
   215|      5|                    throw std::invalid_argument("FEN halfmove clock is not a valid integer");
-  216|    548|                halfmove = halfmove * 10 + static_cast<uint32_t>(c - '0');
-  217|    548|            }
-  218|     24|            if (halfmove > 100) throw std::invalid_argument("FEN halfmove clock exceeds 100");
+  216|  1.83k|                halfmove = halfmove * 10 + static_cast<uint32_t>(c - '0');
+  217|  1.83k|            }
+  218|     30|            if (halfmove > 100) throw std::invalid_argument("FEN halfmove clock exceeds 100");
   ------------------
-  |  Branch (218:17): [True: 11, False: 13]
+  |  Branch (218:17): [True: 12, False: 18]
   ------------------
-  219|     13|            metadata |= (halfmove << 9) & HALF_MOVE_CLOCK;
-  220|     13|        }
+  219|     18|            metadata |= (halfmove << 9) & HALF_MOVE_CLOCK;
+  220|     18|        }
   221|       |
   222|       |        // --- Field 6: Fullmove number (parsed for validation only, not stored) ---
-  223|     14|        if (fieldCount >= 6) {
+  223|     20|        if (fieldCount >= 6) {
   ------------------
-  |  Branch (223:13): [True: 10, False: 4]
+  |  Branch (223:13): [True: 10, False: 10]
   ------------------
   224|    203|            for (char c : fields[5]) {
   ------------------
@@ -412,98 +412,98 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
   230|       |        // --- Check detection ---
   231|       |        // The side that just moved must not be in check. Temporarily flip side to move
   232|       |        // so that getCheckers() evaluates from the non-moving side's perspective.
-  233|     11|        metadata ^= BLACK_TO_MOVE;
+  233|     17|        metadata ^= BLACK_TO_MOVE;
   234|       |        // if (getCheckers()) throw std::invalid_argument("FEN has the non-moving side in check");
-  235|     11|        metadata ^= BLACK_TO_MOVE;
-  236|     11|    }
+  235|     17|        metadata ^= BLACK_TO_MOVE;
+  236|     17|    }
 
 _ZNK5aleph5chess5Board11isBlackTurnEv:
-   13|     11|    bool Board::isBlackTurn() const { return (metadata & BLACK_TO_MOVE) != 0U; }
+   13|     14|    bool Board::isBlackTurn() const { return (metadata & BLACK_TO_MOVE) != 0U; }
 _ZNK5aleph5chess5Board11isWhiteTurnEv:
-   15|      6|    bool Board::isWhiteTurn() const { return (metadata & BLACK_TO_MOVE) == 0U; }
+   15|      8|    bool Board::isWhiteTurn() const { return (metadata & BLACK_TO_MOVE) == 0U; }
 
 _ZNK5aleph5chess5Board17getWhiteOccupancyEv:
-   18|     44|    std::uint64_t Board::getWhiteOccupancy() const {
-   19|     44|        return whiteBitboards[0] | whiteBitboards[1] | whiteBitboards[2] | whiteBitboards[3] |
-   20|     44|               whiteBitboards[4] | whiteBitboards[5];
-   21|     44|    }
+   18|     68|    std::uint64_t Board::getWhiteOccupancy() const {
+   19|     68|        return whiteBitboards[0] | whiteBitboards[1] | whiteBitboards[2] | whiteBitboards[3] |
+   20|     68|               whiteBitboards[4] | whiteBitboards[5];
+   21|     68|    }
 _ZNK5aleph5chess5Board17getBlackOccupancyEv:
-   23|     44|    std::uint64_t Board::getBlackOccupancy() const {
-   24|     44|        return blackBitboards[0] | blackBitboards[1] | blackBitboards[2] | blackBitboards[3] |
-   25|     44|               blackBitboards[4] | blackBitboards[5];
-   26|     44|    }
+   23|     68|    std::uint64_t Board::getBlackOccupancy() const {
+   24|     68|        return blackBitboards[0] | blackBitboards[1] | blackBitboards[2] | blackBitboards[3] |
+   25|     68|               blackBitboards[4] | blackBitboards[5];
+   26|     68|    }
 _ZNK5aleph5chess5Board12getOccupancyEv:
-   16|     11|    std::uint64_t Board::getOccupancy() const { return getWhiteOccupancy() | getBlackOccupancy(); }
+   16|     17|    std::uint64_t Board::getOccupancy() const { return getWhiteOccupancy() | getBlackOccupancy(); }
 
 _ZN5aleph5chess5PieceC2Ec:
-   67|    419|            constexpr explicit Piece(char c) : data(0) {
-   68|    419|                auto pos = detail::PIECE_TYPE_CHARS.find(c);
+   67|    449|            constexpr explicit Piece(char c) : data(0) {
+   68|    449|                auto pos = detail::PIECE_TYPE_CHARS.find(c);
    69|       |                DEBUG_ASSERT(pos != std::string_view::npos);
-   70|    419|                data = static_cast<uint8_t>(pos);
-   71|    419|            }
+   70|    449|                data = static_cast<uint8_t>(pos);
+   71|    449|            }
 _ZNK5aleph5chess5Piece7isBlackEv:
-   79|    419|            [[nodiscard]] constexpr inline bool isBlack() const noexcept { return data >= 6; }
+   79|    449|            [[nodiscard]] constexpr inline bool isBlack() const noexcept { return data >= 6; }
 _ZNK5aleph5chess5Piece4typeEv:
-   74|    419|            [[nodiscard]] constexpr inline PieceType type() const noexcept {
-   75|    419|                return data == NONE ? NONE : static_cast<PieceType>(data % 6);
+   74|    449|            [[nodiscard]] constexpr inline PieceType type() const noexcept {
+   75|    449|                return data == NONE ? NONE : static_cast<PieceType>(data % 6);
   ------------------
-  |  Branch (75:24): [True: 0, False: 419]
+  |  Branch (75:24): [True: 0, False: 449]
   ------------------
-   76|    419|            }
+   76|    449|            }
 
 _ZN5aleph5chess6SquareC2Ehh:
-   56|    422|            constexpr Square(std::uint8_t r, std::uint8_t f) : data(r * 8 + f) {
-   57|    422|                DEBUG_ASSERT(r < 8);
+   56|    453|            constexpr Square(std::uint8_t r, std::uint8_t f) : data(r * 8 + f) {
+   57|    453|                DEBUG_ASSERT(r < 8);
    58|       |                DEBUG_ASSERT(f < 8);
-   59|    422|            }
+   59|    453|            }
 _ZNK5aleph5chess6SquarecvhEv:
-   82|    422|            constexpr inline operator std::uint8_t() const noexcept { return data; }
+   82|    453|            constexpr inline operator std::uint8_t() const noexcept { return data; }
 
 LLVMFuzzerTestOneInput:
-   15|    117|extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-   16|    117|    if (size == 0) return 0;
+   15|    124|extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+   16|    124|    if (size == 0) return 0;
   ------------------
-  |  Branch (16:9): [True: 0, False: 117]
+  |  Branch (16:9): [True: 0, False: 124]
   ------------------
    17|       |
-   18|    117|    std::string_view fen(reinterpret_cast<const char*>(data), size);
+   18|    124|    std::string_view fen(reinterpret_cast<const char*>(data), size);
    19|       |
-   20|    117|    try {
-   21|    117|        Board b(fen);
+   20|    124|    try {
+   21|    124|        Board b(fen);
    22|       |
    23|       |        // If construction succeeded, verify basic invariants
-   24|    117|        ASSERT(aleph::platform::popcnt(b.getWhiteOccupancy() & b.getBlackOccupancy()) == 0);
+   24|    124|        ASSERT(aleph::platform::popcnt(b.getWhiteOccupancy() & b.getBlackOccupancy()) == 0);
   ------------------
-  |  Branch (24:9): [True: 0, False: 117]
-  |  Branch (24:9): [Folded, False: 117]
+  |  Branch (24:9): [True: 0, False: 124]
+  |  Branch (24:9): [Folded, False: 124]
   ------------------
-   25|    117|        ASSERT(aleph::platform::popcnt(b.getOccupancy()) ==
+   25|    124|        ASSERT(aleph::platform::popcnt(b.getOccupancy()) ==
   ------------------
-  |  Branch (25:9): [True: 0, False: 117]
-  |  Branch (25:9): [Folded, False: 117]
+  |  Branch (25:9): [True: 0, False: 124]
+  |  Branch (25:9): [Folded, False: 124]
   ------------------
-   26|    117|               aleph::platform::popcnt(b.getWhiteOccupancy()) +
-   27|    117|                   aleph::platform::popcnt(b.getBlackOccupancy()));
-   28|    117|        ASSERT(aleph::platform::popcnt(b.getBlackOccupancy()) >= 1);
+   26|    124|               aleph::platform::popcnt(b.getWhiteOccupancy()) +
+   27|    124|                   aleph::platform::popcnt(b.getBlackOccupancy()));
+   28|    124|        ASSERT(aleph::platform::popcnt(b.getBlackOccupancy()) >= 1);
   ------------------
-  |  Branch (28:9): [True: 0, False: 117]
-  |  Branch (28:9): [Folded, False: 117]
+  |  Branch (28:9): [True: 0, False: 124]
+  |  Branch (28:9): [Folded, False: 124]
   ------------------
-   29|    117|        ASSERT(aleph::platform::popcnt(b.getWhiteOccupancy()) >= 1);
+   29|    124|        ASSERT(aleph::platform::popcnt(b.getWhiteOccupancy()) >= 1);
   ------------------
-  |  Branch (29:9): [True: 0, False: 117]
-  |  Branch (29:9): [Folded, False: 117]
+  |  Branch (29:9): [True: 0, False: 124]
+  |  Branch (29:9): [Folded, False: 124]
   ------------------
    30|       |
-   31|    117|    } catch (const std::invalid_argument&) {
+   31|    124|    } catch (const std::invalid_argument&) {
    32|       |        // Expected for malformed FEN — not a bug
-   33|    106|    }
+   33|    107|    }
    34|       |
-   35|    117|    return 0;
-   36|    117|}
+   35|    124|    return 0;
+   36|    124|}
 
 _ZN5aleph8platform6popcntEm:
-   64|  1.12k|    [[nodiscard]] constexpr auto popcnt(std::uint64_t val) noexcept -> std::uint64_t {
-   65|  1.12k|        return std::popcount(val);
-   66|  1.12k|    }
+   64|  1.26k|    [[nodiscard]] constexpr auto popcnt(std::uint64_t val) noexcept -> std::uint64_t {
+   65|  1.26k|        return std::popcount(val);
+   66|  1.26k|    }
 
