@@ -7,14 +7,14 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
    16|    124|        std::size_t fieldCount = 0;
    17|    124|        std::size_t start      = 0;
    18|       |
-   19|  4.96k|        for (std::size_t i = 0; i <= fen.size(); ++i) {
+   19|  6.09k|        for (std::size_t i = 0; i <= fen.size(); ++i) {
   ------------------
-  |  Branch (19:33): [True: 4.84k, False: 123]
+  |  Branch (19:33): [True: 5.96k, False: 123]
   ------------------
-   20|  4.84k|            if (i == fen.size() || fen[i] == ' ') {
+   20|  5.96k|            if (i == fen.size() || fen[i] == ' ') {
   ------------------
-  |  Branch (20:17): [True: 124, False: 4.72k]
-  |  Branch (20:36): [True: 397, False: 4.32k]
+  |  Branch (20:17): [True: 124, False: 5.84k]
+  |  Branch (20:36): [True: 397, False: 5.44k]
   ------------------
    21|    521|                if (fieldCount >= 6) throw std::invalid_argument("FEN has too many fields");
   ------------------
@@ -23,7 +23,7 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
    22|    520|                fields[fieldCount++] = fen.substr(start, i - start);
    23|    520|                start                = i + 1;
    24|    520|            }
-   25|  4.84k|        }
+   25|  5.96k|        }
    26|    123|        if (fieldCount < 4)
   ------------------
   |  Branch (26:13): [True: 9, False: 114]
@@ -372,29 +372,29 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
   |  Branch (211:13): [True: 35, False: 2]
   ------------------
   212|     35|            uint32_t halfmove = 0;
-  213|  1.68k|            for (char c : fields[4]) {
+  213|  2.80k|            for (char c : fields[4]) {
   ------------------
-  |  Branch (213:25): [True: 1.68k, False: 28]
+  |  Branch (213:25): [True: 2.80k, False: 28]
   ------------------
-  214|  1.68k|                if (c < '0' || c > '9')
+  214|  2.80k|                if (c < '0' || c > '9')
   ------------------
-  |  Branch (214:21): [True: 4, False: 1.67k]
-  |  Branch (214:32): [True: 3, False: 1.67k]
+  |  Branch (214:21): [True: 3, False: 2.79k]
+  |  Branch (214:32): [True: 4, False: 2.79k]
   ------------------
   215|      7|                    throw std::invalid_argument("FEN halfmove clock is not a valid integer");
-  216|  1.67k|                halfmove = halfmove * 10 + static_cast<uint32_t>(c - '0');
-  217|  1.67k|            }
+  216|  2.79k|                halfmove = halfmove * 10 + static_cast<uint32_t>(c - '0');
+  217|  2.79k|            }
   218|     28|            if (halfmove > 100) throw std::invalid_argument("FEN halfmove clock exceeds 100");
   ------------------
-  |  Branch (218:17): [True: 10, False: 18]
+  |  Branch (218:17): [True: 9, False: 19]
   ------------------
-  219|     18|            metadata |= (halfmove << 9) & HALF_MOVE_CLOCK;
-  220|     18|        }
+  219|     19|            metadata |= (halfmove << 9) & HALF_MOVE_CLOCK;
+  220|     19|        }
   221|       |
   222|       |        // --- Field 6: Fullmove number (parsed for validation only, not stored) ---
-  223|     20|        if (fieldCount >= 6) {
+  223|     21|        if (fieldCount >= 6) {
   ------------------
-  |  Branch (223:13): [True: 10, False: 10]
+  |  Branch (223:13): [True: 10, False: 11]
   ------------------
   224|    203|            for (char c : fields[5]) {
   ------------------
@@ -412,10 +412,10 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
   230|       |        // --- Check detection ---
   231|       |        // The side that just moved must not be in check. Temporarily flip side to move
   232|       |        // so that getCheckers() evaluates from the non-moving side's perspective.
-  233|     17|        metadata ^= BLACK_TO_MOVE;
+  233|     18|        metadata ^= BLACK_TO_MOVE;
   234|       |        // if (getCheckers()) throw std::invalid_argument("FEN has the non-moving side in check");
-  235|     17|        metadata ^= BLACK_TO_MOVE;
-  236|     17|    }
+  235|     18|        metadata ^= BLACK_TO_MOVE;
+  236|     18|    }
 
 _ZNK5aleph5chess5Board11isBlackTurnEv:
    13|     14|    bool Board::isBlackTurn() const { return (metadata & BLACK_TO_MOVE) != 0U; }
@@ -423,17 +423,17 @@ _ZNK5aleph5chess5Board11isWhiteTurnEv:
    15|      8|    bool Board::isWhiteTurn() const { return (metadata & BLACK_TO_MOVE) == 0U; }
 
 _ZNK5aleph5chess5Board17getWhiteOccupancyEv:
-   18|     68|    std::uint64_t Board::getWhiteOccupancy() const {
-   19|     68|        return whiteBitboards[0] | whiteBitboards[1] | whiteBitboards[2] | whiteBitboards[3] |
-   20|     68|               whiteBitboards[4] | whiteBitboards[5];
-   21|     68|    }
+   18|     72|    std::uint64_t Board::getWhiteOccupancy() const {
+   19|     72|        return whiteBitboards[0] | whiteBitboards[1] | whiteBitboards[2] | whiteBitboards[3] |
+   20|     72|               whiteBitboards[4] | whiteBitboards[5];
+   21|     72|    }
 _ZNK5aleph5chess5Board17getBlackOccupancyEv:
-   23|     68|    std::uint64_t Board::getBlackOccupancy() const {
-   24|     68|        return blackBitboards[0] | blackBitboards[1] | blackBitboards[2] | blackBitboards[3] |
-   25|     68|               blackBitboards[4] | blackBitboards[5];
-   26|     68|    }
+   23|     72|    std::uint64_t Board::getBlackOccupancy() const {
+   24|     72|        return blackBitboards[0] | blackBitboards[1] | blackBitboards[2] | blackBitboards[3] |
+   25|     72|               blackBitboards[4] | blackBitboards[5];
+   26|     72|    }
 _ZNK5aleph5chess5Board12getOccupancyEv:
-   16|     17|    std::uint64_t Board::getOccupancy() const { return getWhiteOccupancy() | getBlackOccupancy(); }
+   16|     18|    std::uint64_t Board::getOccupancy() const { return getWhiteOccupancy() | getBlackOccupancy(); }
 
 _ZN5aleph5chess5PieceC2Ec:
    67|    411|            constexpr explicit Piece(char c) : data(0) {
@@ -497,13 +497,13 @@ LLVMFuzzerTestOneInput:
    30|       |
    31|    124|    } catch (const std::invalid_argument&) {
    32|       |        // Expected for malformed FEN — not a bug
-   33|    107|    }
+   33|    106|    }
    34|       |
    35|    124|    return 0;
    36|    124|}
 
 _ZN5aleph8platform6popcntEm:
-   64|  1.26k|    [[nodiscard]] constexpr auto popcnt(std::uint64_t val) noexcept -> std::uint64_t {
-   65|  1.26k|        return std::popcount(val);
-   66|  1.26k|    }
+   64|  1.27k|    [[nodiscard]] constexpr auto popcnt(std::uint64_t val) noexcept -> std::uint64_t {
+   65|  1.27k|        return std::popcount(val);
+   66|  1.27k|    }
 
