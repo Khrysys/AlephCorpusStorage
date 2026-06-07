@@ -9,9 +9,9 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
    18|       |
    19|  3.61k|        for (std::size_t i = 0; i <= fen.size(); ++i) {
   ------------------
-  |  Branch (19:33): [True: 3.49k, False: 117]
+  |  Branch (19:33): [True: 3.50k, False: 117]
   ------------------
-   20|  3.49k|            if (i == fen.size() || fen[i] == ' ') {
+   20|  3.50k|            if (i == fen.size() || fen[i] == ' ') {
   ------------------
   |  Branch (20:17): [True: 118, False: 3.38k]
   |  Branch (20:36): [True: 373, False: 3.00k]
@@ -23,7 +23,7 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
    22|    490|                fields[fieldCount++] = fen.substr(start, i - start);
    23|    490|                start                = i + 1;
    24|    490|            }
-   25|  3.49k|        }
+   25|  3.50k|        }
    26|    117|        if (fieldCount < 4)
   ------------------
   |  Branch (26:13): [True: 9, False: 108]
@@ -372,29 +372,29 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
   |  Branch (211:13): [True: 29, False: 2]
   ------------------
   212|     29|            uint32_t halfmove = 0;
-  213|    480|            for (char c : fields[4]) {
+  213|    482|            for (char c : fields[4]) {
   ------------------
-  |  Branch (213:25): [True: 480, False: 23]
+  |  Branch (213:25): [True: 482, False: 23]
   ------------------
-  214|    480|                if (c < '0' || c > '9')
+  214|    482|                if (c < '0' || c > '9')
   ------------------
-  |  Branch (214:21): [True: 3, False: 477]
-  |  Branch (214:32): [True: 3, False: 474]
+  |  Branch (214:21): [True: 3, False: 479]
+  |  Branch (214:32): [True: 3, False: 476]
   ------------------
   215|      6|                    throw std::invalid_argument("FEN halfmove clock is not a valid integer");
-  216|    474|                halfmove = halfmove * 10 + static_cast<uint32_t>(c - '0');
-  217|    474|            }
+  216|    476|                halfmove = halfmove * 10 + static_cast<uint32_t>(c - '0');
+  217|    476|            }
   218|     23|            if (halfmove > 100) throw std::invalid_argument("FEN halfmove clock exceeds 100");
   ------------------
-  |  Branch (218:17): [True: 9, False: 14]
+  |  Branch (218:17): [True: 10, False: 13]
   ------------------
-  219|     14|            metadata |= (halfmove << 9) & HALF_MOVE_CLOCK;
-  220|     14|        }
+  219|     13|            metadata |= (halfmove << 9) & HALF_MOVE_CLOCK;
+  220|     13|        }
   221|       |
   222|       |        // --- Field 6: Fullmove number (parsed for validation only, not stored) ---
-  223|     16|        if (fieldCount >= 6) {
+  223|     15|        if (fieldCount >= 6) {
   ------------------
-  |  Branch (223:13): [True: 10, False: 6]
+  |  Branch (223:13): [True: 10, False: 5]
   ------------------
   224|    203|            for (char c : fields[5]) {
   ------------------
@@ -412,10 +412,10 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
   230|       |        // --- Check detection ---
   231|       |        // The side that just moved must not be in check. Temporarily flip side to move
   232|       |        // so that getCheckers() evaluates from the non-moving side's perspective.
-  233|     13|        metadata ^= BLACK_TO_MOVE;
+  233|     12|        metadata ^= BLACK_TO_MOVE;
   234|       |        // if (getCheckers()) throw std::invalid_argument("FEN has the non-moving side in check");
-  235|     13|        metadata ^= BLACK_TO_MOVE;
-  236|     13|    }
+  235|     12|        metadata ^= BLACK_TO_MOVE;
+  236|     12|    }
 
 _ZNK5aleph5chess5Board11isBlackTurnEv:
    13|     14|    bool Board::isBlackTurn() const { return (metadata & BLACK_TO_MOVE) != 0U; }
@@ -423,17 +423,17 @@ _ZNK5aleph5chess5Board11isWhiteTurnEv:
    15|      8|    bool Board::isWhiteTurn() const { return (metadata & BLACK_TO_MOVE) == 0U; }
 
 _ZNK5aleph5chess5Board17getWhiteOccupancyEv:
-   18|     52|    std::uint64_t Board::getWhiteOccupancy() const {
-   19|     52|        return whiteBitboards[0] | whiteBitboards[1] | whiteBitboards[2] | whiteBitboards[3] |
-   20|     52|               whiteBitboards[4] | whiteBitboards[5];
-   21|     52|    }
+   18|     48|    std::uint64_t Board::getWhiteOccupancy() const {
+   19|     48|        return whiteBitboards[0] | whiteBitboards[1] | whiteBitboards[2] | whiteBitboards[3] |
+   20|     48|               whiteBitboards[4] | whiteBitboards[5];
+   21|     48|    }
 _ZNK5aleph5chess5Board17getBlackOccupancyEv:
-   23|     52|    std::uint64_t Board::getBlackOccupancy() const {
-   24|     52|        return blackBitboards[0] | blackBitboards[1] | blackBitboards[2] | blackBitboards[3] |
-   25|     52|               blackBitboards[4] | blackBitboards[5];
-   26|     52|    }
+   23|     48|    std::uint64_t Board::getBlackOccupancy() const {
+   24|     48|        return blackBitboards[0] | blackBitboards[1] | blackBitboards[2] | blackBitboards[3] |
+   25|     48|               blackBitboards[4] | blackBitboards[5];
+   26|     48|    }
 _ZNK5aleph5chess5Board12getOccupancyEv:
-   16|     13|    std::uint64_t Board::getOccupancy() const { return getWhiteOccupancy() | getBlackOccupancy(); }
+   16|     12|    std::uint64_t Board::getOccupancy() const { return getWhiteOccupancy() | getBlackOccupancy(); }
 
 _ZN5aleph5chess5PieceC2Ec:
    67|    399|            constexpr explicit Piece(char c) : data(0) {
@@ -497,7 +497,7 @@ LLVMFuzzerTestOneInput:
    30|       |
    31|    118|    } catch (const std::invalid_argument&) {
    32|       |        // Expected for malformed FEN — not a bug
-   33|    105|    }
+   33|    106|    }
    34|       |
    35|    118|    return 0;
    36|    118|}
