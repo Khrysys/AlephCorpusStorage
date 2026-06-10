@@ -372,18 +372,18 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
   |  Branch (211:13): [True: 29, False: 2]
   ------------------
   212|     29|            uint32_t halfmove = 0;
-  213|    481|            for (char c : fields[4]) {
+  213|    480|            for (char c : fields[4]) {
   ------------------
-  |  Branch (213:25): [True: 481, False: 23]
+  |  Branch (213:25): [True: 480, False: 23]
   ------------------
-  214|    481|                if (c < '0' || c > '9')
+  214|    480|                if (c < '0' || c > '9')
   ------------------
-  |  Branch (214:21): [True: 3, False: 478]
-  |  Branch (214:32): [True: 3, False: 475]
+  |  Branch (214:21): [True: 3, False: 477]
+  |  Branch (214:32): [True: 3, False: 474]
   ------------------
   215|      6|                    throw std::invalid_argument("FEN halfmove clock is not a valid integer");
-  216|    475|                halfmove = halfmove * 10 + static_cast<uint32_t>(c - '0');
-  217|    475|            }
+  216|    474|                halfmove = halfmove * 10 + static_cast<uint32_t>(c - '0');
+  217|    474|            }
   218|     23|            if (halfmove > 100) throw std::invalid_argument("FEN halfmove clock exceeds 100");
   ------------------
   |  Branch (218:17): [True: 8, False: 15]
