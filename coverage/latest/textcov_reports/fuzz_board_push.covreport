@@ -1,294 +1,294 @@
 
 
 _ZN5aleph5chess5BoardC2Ev:
-  238|    479|    Board::Board() : Board(detail::STARTING_POSITION_FEN) {}
+  238|    478|    Board::Board() : Board(detail::STARTING_POSITION_FEN) {}
 _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
-   13|    479|        : whiteBitboards{}, blackBitboards{}, metadata(0), _zobristHash(0), _checkers(0) {
+   13|    478|        : whiteBitboards{}, blackBitboards{}, metadata(0), _zobristHash(0), _checkers(0) {
    14|       |        // --- Split FEN into fields ---
-   15|    479|        std::array<std::string_view, 6> fields;
-   16|    479|        std::size_t fieldCount = 0;
-   17|    479|        std::size_t start      = 0;
+   15|    478|        std::array<std::string_view, 6> fields;
+   16|    478|        std::size_t fieldCount = 0;
+   17|    478|        std::size_t start      = 0;
    18|       |
    19|  27.7k|        for (std::size_t i = 0; i <= fen.size(); ++i) {
   ------------------
-  |  Branch (19:33): [True: 27.3k, False: 479]
+  |  Branch (19:33): [True: 27.2k, False: 478]
   ------------------
-   20|  27.3k|            if (i == fen.size() || fen[i] == ' ') {
+   20|  27.2k|            if (i == fen.size() || fen[i] == ' ') {
   ------------------
-  |  Branch (20:17): [True: 479, False: 26.8k]
-  |  Branch (20:36): [True: 2.39k, False: 24.4k]
+  |  Branch (20:17): [True: 478, False: 26.7k]
+  |  Branch (20:36): [True: 2.39k, False: 24.3k]
   ------------------
-   21|  2.87k|                if (fieldCount >= 6) throw std::invalid_argument("FEN has too many fields");
+   21|  2.86k|                if (fieldCount >= 6) throw std::invalid_argument("FEN has too many fields");
   ------------------
-  |  Branch (21:21): [True: 0, False: 2.87k]
+  |  Branch (21:21): [True: 0, False: 2.86k]
   ------------------
-   22|  2.87k|                fields[fieldCount++] = fen.substr(start, i - start);
-   23|  2.87k|                start                = i + 1;
-   24|  2.87k|            }
-   25|  27.3k|        }
-   26|    479|        if (fieldCount < 4)
+   22|  2.86k|                fields[fieldCount++] = fen.substr(start, i - start);
+   23|  2.86k|                start                = i + 1;
+   24|  2.86k|            }
+   25|  27.2k|        }
+   26|    478|        if (fieldCount < 4)
   ------------------
-  |  Branch (26:13): [True: 0, False: 479]
+  |  Branch (26:13): [True: 0, False: 478]
   ------------------
    27|      0|            throw std::invalid_argument("FEN has too few fields (minimum 4 required)");
    28|       |
    29|       |        // --- Field 1: Piece placement ---
-   30|    479|        {
-   31|    479|            std::size_t rankIdx = 7;  // FEN starts from rank 8 (index 7)
-   32|    479|            std::size_t fileIdx = 0;
+   30|    478|        {
+   31|    478|            std::size_t rankIdx = 7;  // FEN starts from rank 8 (index 7)
+   32|    478|            std::size_t fileIdx = 0;
    33|       |
    34|  20.5k|            for (char c : fields[0]) {
   ------------------
-  |  Branch (34:25): [True: 20.5k, False: 479]
+  |  Branch (34:25): [True: 20.5k, False: 478]
   ------------------
    35|  20.5k|                if (c == '/') {
   ------------------
-  |  Branch (35:21): [True: 3.35k, False: 17.2k]
+  |  Branch (35:21): [True: 3.34k, False: 17.2k]
   ------------------
-   36|  3.35k|                    if (fileIdx != 8)
+   36|  3.34k|                    if (fileIdx != 8)
   ------------------
-  |  Branch (36:25): [True: 0, False: 3.35k]
+  |  Branch (36:25): [True: 0, False: 3.34k]
   ------------------
    37|      0|                        throw std::invalid_argument("FEN rank does not sum to 8 squares");
-   38|  3.35k|                    if (rankIdx == 0) throw std::invalid_argument("FEN has too many ranks");
+   38|  3.34k|                    if (rankIdx == 0) throw std::invalid_argument("FEN has too many ranks");
   ------------------
-  |  Branch (38:25): [True: 0, False: 3.35k]
+  |  Branch (38:25): [True: 0, False: 3.34k]
   ------------------
-   39|  3.35k|                    --rankIdx;
-   40|  3.35k|                    fileIdx = 0;
+   39|  3.34k|                    --rankIdx;
+   40|  3.34k|                    fileIdx = 0;
    41|  17.2k|                } else if (c >= '1' && c <= '8') {
   ------------------
   |  Branch (41:28): [True: 17.2k, False: 0]
-  |  Branch (41:40): [True: 1.91k, False: 15.3k]
+  |  Branch (41:40): [True: 1.91k, False: 15.2k]
   ------------------
    42|  1.91k|                    fileIdx += static_cast<std::size_t>(c - '0');
    43|  1.91k|                    if (fileIdx > 8) throw std::invalid_argument("FEN rank exceeds 8 squares");
   ------------------
   |  Branch (43:25): [True: 0, False: 1.91k]
   ------------------
-   44|  15.3k|                } else {
-   45|  15.3k|                    if (detail::PIECE_TYPE_CHARS.find(c) == std::string_view::npos)
+   44|  15.2k|                } else {
+   45|  15.2k|                    if (detail::PIECE_TYPE_CHARS.find(c) == std::string_view::npos)
   ------------------
-  |  Branch (45:25): [True: 0, False: 15.3k]
+  |  Branch (45:25): [True: 0, False: 15.2k]
   ------------------
    46|      0|                        throw std::invalid_argument(
    47|      0|                            std::string("FEN contains invalid piece character: ") + c);
-   48|  15.3k|                    if (fileIdx >= 8) throw std::invalid_argument("FEN rank exceeds 8 squares");
+   48|  15.2k|                    if (fileIdx >= 8) throw std::invalid_argument("FEN rank exceeds 8 squares");
   ------------------
-  |  Branch (48:25): [True: 0, False: 15.3k]
+  |  Branch (48:25): [True: 0, False: 15.2k]
   ------------------
    49|       |
-   50|  15.3k|                    Piece p(c);
-   51|  15.3k|                    Square sq(static_cast<uint8_t>(rankIdx), static_cast<uint8_t>(fileIdx));
-   52|  15.3k|                    uint64_t bit = 1ULL << static_cast<uint8_t>(sq);
+   50|  15.2k|                    Piece p(c);
+   51|  15.2k|                    Square sq(static_cast<uint8_t>(rankIdx), static_cast<uint8_t>(fileIdx));
+   52|  15.2k|                    uint64_t bit = 1ULL << static_cast<uint8_t>(sq);
    53|       |
-   54|  15.3k|                    if (p.isBlack())
+   54|  15.2k|                    if (p.isBlack())
   ------------------
-  |  Branch (54:25): [True: 7.66k, False: 7.66k]
+  |  Branch (54:25): [True: 7.64k, False: 7.64k]
   ------------------
-   55|  7.66k|                        blackBitboards[p.type()] |= bit;
-   56|  7.66k|                    else
-   57|  7.66k|                        whiteBitboards[p.type()] |= bit;
+   55|  7.64k|                        blackBitboards[p.type()] |= bit;
+   56|  7.64k|                    else
+   57|  7.64k|                        whiteBitboards[p.type()] |= bit;
    58|       |
-   59|  15.3k|                    ++fileIdx;
-   60|  15.3k|                }
+   59|  15.2k|                    ++fileIdx;
+   60|  15.2k|                }
    61|  20.5k|            }
    62|       |
-   63|    479|            if (fileIdx != 8)
+   63|    478|            if (fileIdx != 8)
   ------------------
-  |  Branch (63:17): [True: 0, False: 479]
+  |  Branch (63:17): [True: 0, False: 478]
   ------------------
    64|      0|                throw std::invalid_argument("FEN final rank does not sum to 8 squares");
-   65|    479|            if (rankIdx != 0) throw std::invalid_argument("FEN has too few ranks");
+   65|    478|            if (rankIdx != 0) throw std::invalid_argument("FEN has too few ranks");
   ------------------
-  |  Branch (65:17): [True: 0, False: 479]
+  |  Branch (65:17): [True: 0, False: 478]
   ------------------
-   66|    479|        }
+   66|    478|        }
    67|       |
    68|       |        // --- Piece validity checks ---
-   69|    479|        {
-   70|    479|            if (platform::popcnt(whiteBitboards[KING]) != 1)
+   69|    478|        {
+   70|    478|            if (platform::popcnt(whiteBitboards[KING]) != 1)
   ------------------
-  |  Branch (70:17): [True: 0, False: 479]
+  |  Branch (70:17): [True: 0, False: 478]
   ------------------
    71|      0|                throw std::invalid_argument("FEN must have exactly one white king");
-   72|    479|            if (platform::popcnt(blackBitboards[KING]) != 1)
+   72|    478|            if (platform::popcnt(blackBitboards[KING]) != 1)
   ------------------
-  |  Branch (72:17): [True: 0, False: 479]
+  |  Branch (72:17): [True: 0, False: 478]
   ------------------
    73|      0|                throw std::invalid_argument("FEN must have exactly one black king");
    74|       |
-   75|    479|            if (platform::popcnt(whiteBitboards[PAWN]) > 8)
+   75|    478|            if (platform::popcnt(whiteBitboards[PAWN]) > 8)
   ------------------
-  |  Branch (75:17): [True: 0, False: 479]
+  |  Branch (75:17): [True: 0, False: 478]
   ------------------
    76|      0|                throw std::invalid_argument("FEN has too many white pawns");
-   77|    479|            if (platform::popcnt(blackBitboards[PAWN]) > 8)
+   77|    478|            if (platform::popcnt(blackBitboards[PAWN]) > 8)
   ------------------
-  |  Branch (77:17): [True: 0, False: 479]
+  |  Branch (77:17): [True: 0, False: 478]
   ------------------
    78|      0|                throw std::invalid_argument("FEN has too many black pawns");
    79|       |
-   80|    479|            constexpr uint64_t RANK_1 = 0x00000000000000FFULL;
-   81|    479|            constexpr uint64_t RANK_8 = 0xFF00000000000000ULL;
-   82|    479|            if (whiteBitboards[PAWN] & (RANK_1 | RANK_8))
+   80|    478|            constexpr uint64_t RANK_1 = 0x00000000000000FFULL;
+   81|    478|            constexpr uint64_t RANK_8 = 0xFF00000000000000ULL;
+   82|    478|            if (whiteBitboards[PAWN] & (RANK_1 | RANK_8))
   ------------------
-  |  Branch (82:17): [True: 0, False: 479]
+  |  Branch (82:17): [True: 0, False: 478]
   ------------------
    83|      0|                throw std::invalid_argument("FEN has pawns on back rank");
-   84|    479|            if (blackBitboards[PAWN] & (RANK_1 | RANK_8))
+   84|    478|            if (blackBitboards[PAWN] & (RANK_1 | RANK_8))
   ------------------
-  |  Branch (84:17): [True: 0, False: 479]
+  |  Branch (84:17): [True: 0, False: 478]
   ------------------
    85|      0|                throw std::invalid_argument("FEN has pawns on back rank");
    86|       |
-   87|    479|            uint32_t whitePieces = 0;
-   88|    479|            uint32_t blackPieces = 0;
-   89|  3.35k|            for (int i = 0; i < 6; i++) {
+   87|    478|            uint32_t whitePieces = 0;
+   88|    478|            uint32_t blackPieces = 0;
+   89|  3.34k|            for (int i = 0; i < 6; i++) {
   ------------------
-  |  Branch (89:29): [True: 2.87k, False: 479]
+  |  Branch (89:29): [True: 2.86k, False: 478]
   ------------------
-   90|  2.87k|                whitePieces += platform::popcnt(whiteBitboards[i]);
-   91|  2.87k|                blackPieces += platform::popcnt(blackBitboards[i]);
-   92|  2.87k|            }
-   93|    479|            if (whitePieces > 16) throw std::invalid_argument("FEN has too many white pieces");
+   90|  2.86k|                whitePieces += platform::popcnt(whiteBitboards[i]);
+   91|  2.86k|                blackPieces += platform::popcnt(blackBitboards[i]);
+   92|  2.86k|            }
+   93|    478|            if (whitePieces > 16) throw std::invalid_argument("FEN has too many white pieces");
   ------------------
-  |  Branch (93:17): [True: 0, False: 479]
+  |  Branch (93:17): [True: 0, False: 478]
   ------------------
-   94|    479|            if (blackPieces > 16) throw std::invalid_argument("FEN has too many black pieces");
+   94|    478|            if (blackPieces > 16) throw std::invalid_argument("FEN has too many black pieces");
   ------------------
-  |  Branch (94:17): [True: 0, False: 479]
+  |  Branch (94:17): [True: 0, False: 478]
   ------------------
    95|       |
-   96|    479|            uint64_t allWhite = 0, allBlack = 0;
-   97|  3.35k|            for (int i = 0; i < 6; i++) {
+   96|    478|            uint64_t allWhite = 0, allBlack = 0;
+   97|  3.34k|            for (int i = 0; i < 6; i++) {
   ------------------
-  |  Branch (97:29): [True: 2.87k, False: 479]
+  |  Branch (97:29): [True: 2.86k, False: 478]
   ------------------
-   98|  2.87k|                if (whiteBitboards[i] & allWhite)
+   98|  2.86k|                if (whiteBitboards[i] & allWhite)
   ------------------
-  |  Branch (98:21): [True: 0, False: 2.87k]
+  |  Branch (98:21): [True: 0, False: 2.86k]
   ------------------
    99|      0|                    throw std::invalid_argument("FEN has overlapping white pieces");
-  100|  2.87k|                if (blackBitboards[i] & allBlack)
+  100|  2.86k|                if (blackBitboards[i] & allBlack)
   ------------------
-  |  Branch (100:21): [True: 0, False: 2.87k]
+  |  Branch (100:21): [True: 0, False: 2.86k]
   ------------------
   101|      0|                    throw std::invalid_argument("FEN has overlapping black pieces");
-  102|  2.87k|                allWhite |= whiteBitboards[i];
-  103|  2.87k|                allBlack |= blackBitboards[i];
-  104|  2.87k|            }
-  105|    479|            if (allWhite & allBlack)
+  102|  2.86k|                allWhite |= whiteBitboards[i];
+  103|  2.86k|                allBlack |= blackBitboards[i];
+  104|  2.86k|            }
+  105|    478|            if (allWhite & allBlack)
   ------------------
-  |  Branch (105:17): [True: 0, False: 479]
+  |  Branch (105:17): [True: 0, False: 478]
   ------------------
   106|      0|                throw std::invalid_argument("FEN has overlapping white and black pieces");
-  107|    479|        }
+  107|    478|        }
   108|       |
   109|       |        // --- Field 2: Side to move ---
-  110|    479|        {
-  111|    479|            if (fields[1] == "b")
+  110|    478|        {
+  111|    478|            if (fields[1] == "b")
   ------------------
-  |  Branch (111:17): [True: 0, False: 479]
+  |  Branch (111:17): [True: 0, False: 478]
   ------------------
   112|      0|                metadata |= BLACK_TO_MOVE;
-  113|    479|            else if (fields[1] != "w")
+  113|    478|            else if (fields[1] != "w")
   ------------------
-  |  Branch (113:22): [True: 0, False: 479]
+  |  Branch (113:22): [True: 0, False: 478]
   ------------------
   114|      0|                throw std::invalid_argument("FEN side to move must be 'w' or 'b'");
-  115|    479|        }
+  115|    478|        }
   116|       |
   117|       |        // --- Field 3: Castling rights ---
-  118|    479|        {
-  119|    479|            constexpr uint64_t WHITE_KING_START = 1ULL << static_cast<uint8_t>(Square(0, 4));
-  120|    479|            constexpr uint64_t WHITE_KS_ROOK    = 1ULL << static_cast<uint8_t>(Square(0, 7));
-  121|    479|            constexpr uint64_t WHITE_QS_ROOK    = 1ULL << static_cast<uint8_t>(Square(0, 0));
-  122|    479|            constexpr uint64_t BLACK_KING_START = 1ULL << static_cast<uint8_t>(Square(7, 4));
-  123|    479|            constexpr uint64_t BLACK_KS_ROOK    = 1ULL << static_cast<uint8_t>(Square(7, 7));
-  124|    479|            constexpr uint64_t BLACK_QS_ROOK    = 1ULL << static_cast<uint8_t>(Square(7, 0));
+  118|    478|        {
+  119|    478|            constexpr uint64_t WHITE_KING_START = 1ULL << static_cast<uint8_t>(Square(0, 4));
+  120|    478|            constexpr uint64_t WHITE_KS_ROOK    = 1ULL << static_cast<uint8_t>(Square(0, 7));
+  121|    478|            constexpr uint64_t WHITE_QS_ROOK    = 1ULL << static_cast<uint8_t>(Square(0, 0));
+  122|    478|            constexpr uint64_t BLACK_KING_START = 1ULL << static_cast<uint8_t>(Square(7, 4));
+  123|    478|            constexpr uint64_t BLACK_KS_ROOK    = 1ULL << static_cast<uint8_t>(Square(7, 7));
+  124|    478|            constexpr uint64_t BLACK_QS_ROOK    = 1ULL << static_cast<uint8_t>(Square(7, 0));
   125|       |
-  126|    479|            if (fields[2] != "-") {
+  126|    478|            if (fields[2] != "-") {
   ------------------
-  |  Branch (126:17): [True: 479, False: 0]
+  |  Branch (126:17): [True: 478, False: 0]
   ------------------
   127|  1.91k|                for (char c : fields[2]) {
   ------------------
-  |  Branch (127:29): [True: 1.91k, False: 479]
+  |  Branch (127:29): [True: 1.91k, False: 478]
   ------------------
   128|  1.91k|                    switch (c) {
-  129|    479|                        case 'K':
+  129|    478|                        case 'K':
   ------------------
-  |  Branch (129:25): [True: 479, False: 1.43k]
+  |  Branch (129:25): [True: 478, False: 1.43k]
   ------------------
-  130|    479|                            if (!(whiteBitboards[KING] & WHITE_KING_START))
+  130|    478|                            if (!(whiteBitboards[KING] & WHITE_KING_START))
   ------------------
-  |  Branch (130:33): [True: 0, False: 479]
+  |  Branch (130:33): [True: 0, False: 478]
   ------------------
   131|      0|                                throw std::invalid_argument(
   132|      0|                                    "FEN claims white kingside castling but king not on e1");
-  133|    479|                            if (!(whiteBitboards[ROOK] & WHITE_KS_ROOK))
+  133|    478|                            if (!(whiteBitboards[ROOK] & WHITE_KS_ROOK))
   ------------------
-  |  Branch (133:33): [True: 0, False: 479]
+  |  Branch (133:33): [True: 0, False: 478]
   ------------------
   134|      0|                                throw std::invalid_argument(
   135|      0|                                    "FEN claims white kingside castling but rook not on h1");
-  136|    479|                            metadata |= WHITE_KINGSIDE_CASTLE;
-  137|    479|                            break;
-  138|    479|                        case 'Q':
+  136|    478|                            metadata |= WHITE_KINGSIDE_CASTLE;
+  137|    478|                            break;
+  138|    478|                        case 'Q':
   ------------------
-  |  Branch (138:25): [True: 479, False: 1.43k]
+  |  Branch (138:25): [True: 478, False: 1.43k]
   ------------------
-  139|    479|                            if (!(whiteBitboards[KING] & WHITE_KING_START))
+  139|    478|                            if (!(whiteBitboards[KING] & WHITE_KING_START))
   ------------------
-  |  Branch (139:33): [True: 0, False: 479]
+  |  Branch (139:33): [True: 0, False: 478]
   ------------------
   140|      0|                                throw std::invalid_argument(
   141|      0|                                    "FEN claims white queenside castling but king not on e1");
-  142|    479|                            if (!(whiteBitboards[ROOK] & WHITE_QS_ROOK))
+  142|    478|                            if (!(whiteBitboards[ROOK] & WHITE_QS_ROOK))
   ------------------
-  |  Branch (142:33): [True: 0, False: 479]
+  |  Branch (142:33): [True: 0, False: 478]
   ------------------
   143|      0|                                throw std::invalid_argument(
   144|      0|                                    "FEN claims white queenside castling but rook not on a1");
-  145|    479|                            metadata |= WHITE_QUEENSIDE_CASTLE;
-  146|    479|                            break;
-  147|    479|                        case 'k':
+  145|    478|                            metadata |= WHITE_QUEENSIDE_CASTLE;
+  146|    478|                            break;
+  147|    478|                        case 'k':
   ------------------
-  |  Branch (147:25): [True: 479, False: 1.43k]
+  |  Branch (147:25): [True: 478, False: 1.43k]
   ------------------
-  148|    479|                            if (!(blackBitboards[KING] & BLACK_KING_START))
+  148|    478|                            if (!(blackBitboards[KING] & BLACK_KING_START))
   ------------------
-  |  Branch (148:33): [True: 0, False: 479]
+  |  Branch (148:33): [True: 0, False: 478]
   ------------------
   149|      0|                                throw std::invalid_argument(
   150|      0|                                    "FEN claims black kingside castling but king not on e8");
-  151|    479|                            if (!(blackBitboards[ROOK] & BLACK_KS_ROOK))
+  151|    478|                            if (!(blackBitboards[ROOK] & BLACK_KS_ROOK))
   ------------------
-  |  Branch (151:33): [True: 0, False: 479]
+  |  Branch (151:33): [True: 0, False: 478]
   ------------------
   152|      0|                                throw std::invalid_argument(
   153|      0|                                    "FEN claims black kingside castling but rook not on h8");
-  154|    479|                            metadata |= BLACK_KINGSIDE_CASTLE;
-  155|    479|                            break;
-  156|    479|                        case 'q':
+  154|    478|                            metadata |= BLACK_KINGSIDE_CASTLE;
+  155|    478|                            break;
+  156|    478|                        case 'q':
   ------------------
-  |  Branch (156:25): [True: 479, False: 1.43k]
+  |  Branch (156:25): [True: 478, False: 1.43k]
   ------------------
-  157|    479|                            if (!(blackBitboards[KING] & BLACK_KING_START))
+  157|    478|                            if (!(blackBitboards[KING] & BLACK_KING_START))
   ------------------
-  |  Branch (157:33): [True: 0, False: 479]
+  |  Branch (157:33): [True: 0, False: 478]
   ------------------
   158|      0|                                throw std::invalid_argument(
   159|      0|                                    "FEN claims black queenside castling but king not on e8");
-  160|    479|                            if (!(blackBitboards[ROOK] & BLACK_QS_ROOK))
+  160|    478|                            if (!(blackBitboards[ROOK] & BLACK_QS_ROOK))
   ------------------
-  |  Branch (160:33): [True: 0, False: 479]
+  |  Branch (160:33): [True: 0, False: 478]
   ------------------
   161|      0|                                throw std::invalid_argument(
   162|      0|                                    "FEN claims black queenside castling but rook not on a8");
-  163|    479|                            metadata |= BLACK_QUEENSIDE_CASTLE;
-  164|    479|                            break;
+  163|    478|                            metadata |= BLACK_QUEENSIDE_CASTLE;
+  164|    478|                            break;
   165|      0|                        default:
   ------------------
   |  Branch (165:25): [True: 0, False: 1.91k]
@@ -297,14 +297,14 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
   167|      0|                                std::string("FEN castling field contains invalid character: ") + c);
   168|  1.91k|                    }
   169|  1.91k|                }
-  170|    479|            }
-  171|    479|        }
+  170|    478|            }
+  171|    478|        }
   172|       |
   173|       |        // --- Field 4: En passant ---
-  174|    479|        {
-  175|    479|            if (fields[3] != "-") {
+  174|    478|        {
+  175|    478|            if (fields[3] != "-") {
   ------------------
-  |  Branch (175:17): [True: 0, False: 479]
+  |  Branch (175:17): [True: 0, False: 478]
   ------------------
   176|      0|                if (fields[3].size() != 2)
   ------------------
@@ -366,65 +366,65 @@ _ZN5aleph5chess5BoardC2ESt17basic_string_viewIcSt11char_traitsIcEE:
   205|      0|                metadata |= EN_PASSANT_VALID;
   206|      0|                metadata |= (file & EN_PASSANT_FILE_MASK);
   207|      0|            }
-  208|    479|        }
+  208|    478|        }
   209|       |
   210|       |        // --- Field 5: Halfmove clock (optional) ---
-  211|    479|        if (fieldCount >= 5) {
+  211|    478|        if (fieldCount >= 5) {
   ------------------
-  |  Branch (211:13): [True: 479, False: 0]
+  |  Branch (211:13): [True: 478, False: 0]
   ------------------
-  212|    479|            uint32_t halfmove = 0;
-  213|    479|            for (char c : fields[4]) {
+  212|    478|            uint32_t halfmove = 0;
+  213|    478|            for (char c : fields[4]) {
   ------------------
-  |  Branch (213:25): [True: 479, False: 479]
+  |  Branch (213:25): [True: 478, False: 478]
   ------------------
-  214|    479|                if (c < '0' || c > '9')
+  214|    478|                if (c < '0' || c > '9')
   ------------------
-  |  Branch (214:21): [True: 0, False: 479]
-  |  Branch (214:32): [True: 0, False: 479]
+  |  Branch (214:21): [True: 0, False: 478]
+  |  Branch (214:32): [True: 0, False: 478]
   ------------------
   215|      0|                    throw std::invalid_argument("FEN halfmove clock is not a valid integer");
-  216|    479|                halfmove = halfmove * 10 + static_cast<uint32_t>(c - '0');
-  217|    479|            }
-  218|    479|            if (halfmove > 100) throw std::invalid_argument("FEN halfmove clock exceeds 100");
+  216|    478|                halfmove = halfmove * 10 + static_cast<uint32_t>(c - '0');
+  217|    478|            }
+  218|    478|            if (halfmove > 100) throw std::invalid_argument("FEN halfmove clock exceeds 100");
   ------------------
-  |  Branch (218:17): [True: 0, False: 479]
+  |  Branch (218:17): [True: 0, False: 478]
   ------------------
-  219|    479|            metadata |= (halfmove << 9) & HALF_MOVE_CLOCK;
-  220|    479|        }
+  219|    478|            metadata |= (halfmove << 9) & HALF_MOVE_CLOCK;
+  220|    478|        }
   221|       |
   222|       |        // --- Field 6: Fullmove number (parsed for validation only, not stored) ---
-  223|    479|        if (fieldCount >= 6) {
+  223|    478|        if (fieldCount >= 6) {
   ------------------
-  |  Branch (223:13): [True: 479, False: 0]
+  |  Branch (223:13): [True: 478, False: 0]
   ------------------
-  224|    479|            for (char c : fields[5]) {
+  224|    478|            for (char c : fields[5]) {
   ------------------
-  |  Branch (224:25): [True: 479, False: 479]
+  |  Branch (224:25): [True: 478, False: 478]
   ------------------
-  225|    479|                if (c < '0' || c > '9')
+  225|    478|                if (c < '0' || c > '9')
   ------------------
-  |  Branch (225:21): [True: 0, False: 479]
-  |  Branch (225:32): [True: 0, False: 479]
+  |  Branch (225:21): [True: 0, False: 478]
+  |  Branch (225:32): [True: 0, False: 478]
   ------------------
   226|      0|                    throw std::invalid_argument("FEN fullmove number is not a valid integer");
-  227|    479|            }
-  228|    479|        }
+  227|    478|            }
+  228|    478|        }
   229|       |
   230|       |        // --- Check detection ---
   231|       |        // The side that just moved must not be in check. Temporarily flip side to move
   232|       |        // so that getCheckers() evaluates from the non-moving side's perspective.
-  233|    479|        metadata ^= BLACK_TO_MOVE;
+  233|    478|        metadata ^= BLACK_TO_MOVE;
   234|       |        // if (getCheckers()) throw std::invalid_argument("FEN has the non-moving side in check");
-  235|    479|        metadata ^= BLACK_TO_MOVE;
-  236|    479|    }
+  235|    478|        metadata ^= BLACK_TO_MOVE;
+  236|    478|    }
 
 _ZNK5aleph5chess5Board11isBlackTurnEv:
-   13|  1.41M|    bool Board::isBlackTurn() const { return (metadata & BLACK_TO_MOVE) != 0U; }
+   13|  1.40M|    bool Board::isBlackTurn() const { return (metadata & BLACK_TO_MOVE) != 0U; }
 _ZNK5aleph5chess5Board16isEnPassantValidEv:
-   29|   350k|    bool Board::isEnPassantValid() const { return (metadata & EN_PASSANT_VALID) != 0U; }
+   29|   351k|    bool Board::isEnPassantValid() const { return (metadata & EN_PASSANT_VALID) != 0U; }
 _ZNK5aleph5chess5Board16getEnPassantFileEv:
-   31|  34.9k|    std::uint8_t Board::getEnPassantFile() const { return (metadata & EN_PASSANT_FILE_MASK); }
+   31|  34.7k|    std::uint8_t Board::getEnPassantFile() const { return (metadata & EN_PASSANT_FILE_MASK); }
 _ZNK5aleph5chess5Board22canWhiteKingsideCastleEv:
    17|  12.3k|    bool Board::canWhiteKingsideCastle() const { return (metadata & WHITE_KINGSIDE_CASTLE) != 0U; }
 _ZNK5aleph5chess5Board23canWhiteQueensideCastleEv:
@@ -432,34 +432,34 @@ _ZNK5aleph5chess5Board23canWhiteQueensideCastleEv:
    20|  12.3k|        return (metadata & WHITE_QUEENSIDE_CASTLE) != 0U;
    21|  12.3k|    }
 _ZNK5aleph5chess5Board22canBlackKingsideCastleEv:
-   23|  12.0k|    bool Board::canBlackKingsideCastle() const { return (metadata & BLACK_KINGSIDE_CASTLE) != 0U; }
+   23|  12.1k|    bool Board::canBlackKingsideCastle() const { return (metadata & BLACK_KINGSIDE_CASTLE) != 0U; }
 _ZNK5aleph5chess5Board23canBlackQueensideCastleEv:
-   25|  12.0k|    bool Board::canBlackQueensideCastle() const {
-   26|  12.0k|        return (metadata & BLACK_QUEENSIDE_CASTLE) != 0U;
-   27|  12.0k|    }
+   25|  12.1k|    bool Board::canBlackQueensideCastle() const {
+   26|  12.1k|        return (metadata & BLACK_QUEENSIDE_CASTLE) != 0U;
+   27|  12.1k|    }
 _ZNK5aleph5chess5Board3getENS0_6SquareE:
-   35|  1.39M|    Piece Board::get(Square sq) const {
-   36|  1.39M|        uint64_t bit = 1ULL << static_cast<uint8_t>(sq);
-   37|  1.39M|        if (!(getOccupancy() & bit)) return Piece(NONE, false);
+   35|  1.38M|    Piece Board::get(Square sq) const {
+   36|  1.38M|        uint64_t bit = 1ULL << static_cast<uint8_t>(sq);
+   37|  1.38M|        if (!(getOccupancy() & bit)) return Piece(NONE, false);
   ------------------
-  |  Branch (37:13): [True: 0, False: 1.39M]
+  |  Branch (37:13): [True: 0, False: 1.38M]
   ------------------
-   38|  4.99M|        for (int i = 0; i < 6; i++) {
+   38|  4.95M|        for (int i = 0; i < 6; i++) {
   ------------------
-  |  Branch (38:25): [True: 4.99M, False: 0]
+  |  Branch (38:25): [True: 4.95M, False: 0]
   ------------------
-   39|  4.99M|            if (whiteBitboards[i] & bit) return Piece(PieceType(i), false);
+   39|  4.95M|            if (whiteBitboards[i] & bit) return Piece(PieceType(i), false);
   ------------------
-  |  Branch (39:17): [True: 679k, False: 4.31M]
+  |  Branch (39:17): [True: 676k, False: 4.27M]
   ------------------
-   40|  4.31M|            if (blackBitboards[i] & bit) return Piece(PieceType(i), true);
+   40|  4.27M|            if (blackBitboards[i] & bit) return Piece(PieceType(i), true);
   ------------------
-  |  Branch (40:17): [True: 711k, False: 3.60M]
+  |  Branch (40:17): [True: 706k, False: 3.57M]
   ------------------
-   41|  4.31M|        }
+   41|  4.27M|        }
    42|       |        // Unreachable: occupancy check guarantees a piece exists on this square.
    43|      0|        return Piece(NONE, false);
-   44|  1.39M|    }
+   44|  1.38M|    }
 _ZNK5aleph5chess5Board16getHalfMoveClockEv:
    33|  16.9k|    std::uint8_t Board::getHalfMoveClock() const { return (metadata & HALF_MOVE_CLOCK) >> 9; }
 
@@ -502,11 +502,11 @@ _ZNK5aleph5chess5Board13getLegalMovesEv:
    79|       |
    80|  24.4k|        for (const auto& m : pseudoLegal)
   ------------------
-  |  Branch (80:28): [True: 1.36M, False: 24.4k]
+  |  Branch (80:28): [True: 1.35M, False: 24.4k]
   ------------------
-   81|  1.36M|            if (isLegalFast(m)) result += m;
+   81|  1.35M|            if (isLegalFast(m)) result += m;
   ------------------
-  |  Branch (81:17): [True: 719k, False: 647k]
+  |  Branch (81:17): [True: 715k, False: 642k]
   ------------------
    82|       |
    83|  24.4k|        return result;
@@ -519,43 +519,43 @@ _ZNK5aleph5chess5Board19getPseudoLegalMovesEv:
   177|       |
   178|  24.4k|        const auto& ownBitboards   = blackTurn ? blackBitboards : whiteBitboards;
   ------------------
-  |  Branch (178:38): [True: 12.0k, False: 12.3k]
+  |  Branch (178:38): [True: 12.1k, False: 12.3k]
   ------------------
   179|  24.4k|        const auto& enemyBitboards = blackTurn ? whiteBitboards : blackBitboards;
   ------------------
-  |  Branch (179:38): [True: 12.0k, False: 12.3k]
+  |  Branch (179:38): [True: 12.1k, False: 12.3k]
   ------------------
   180|       |
   181|  24.4k|        uint64_t ownOcc            = blackTurn ? getBlackOccupancy() : getWhiteOccupancy();
   ------------------
-  |  Branch (181:38): [True: 12.0k, False: 12.3k]
+  |  Branch (181:38): [True: 12.1k, False: 12.3k]
   ------------------
   182|  24.4k|        uint64_t enemyOcc          = blackTurn ? getWhiteOccupancy() : getBlackOccupancy();
   ------------------
-  |  Branch (182:38): [True: 12.0k, False: 12.3k]
+  |  Branch (182:38): [True: 12.1k, False: 12.3k]
   ------------------
   183|  24.4k|        uint64_t occ               = getOccupancy();
   184|       |
   185|  24.4k|        uint8_t promotionRank      = blackTurn ? 0 : 7;
   ------------------
-  |  Branch (185:38): [True: 12.0k, False: 12.3k]
+  |  Branch (185:38): [True: 12.1k, False: 12.3k]
   ------------------
   186|  24.4k|        uint8_t startingRank       = blackTurn ? 6 : 1;
   ------------------
-  |  Branch (186:38): [True: 12.0k, False: 12.3k]
+  |  Branch (186:38): [True: 12.1k, False: 12.3k]
   ------------------
   187|  24.4k|        int8_t pushDir             = blackTurn ? -1 : 1;
   ------------------
-  |  Branch (187:38): [True: 12.0k, False: 12.3k]
+  |  Branch (187:38): [True: 12.1k, False: 12.3k]
   ------------------
   188|       |
   189|       |        // Attack table offset: white pieces at indices 0..5, black at 6..11.
   190|  24.4k|        int colorOffset            = blackTurn ? 6 : 0;
   ------------------
-  |  Branch (190:38): [True: 12.0k, False: 12.3k]
+  |  Branch (190:38): [True: 12.1k, False: 12.3k]
   ------------------
   191|       |
-  192|   170k|        for (int pieceIdx = 0; pieceIdx < 6; pieceIdx++) {
+  192|   171k|        for (int pieceIdx = 0; pieceIdx < 6; pieceIdx++) {
   ------------------
   |  Branch (192:32): [True: 146k, False: 24.4k]
   ------------------
@@ -580,9 +580,9 @@ _ZNK5aleph5chess5Board19getPseudoLegalMovesEv:
   205|       |
   206|   143k|                    if (!(occ & pushBit)) {
   ------------------
-  |  Branch (206:25): [True: 111k, False: 31.9k]
+  |  Branch (206:25): [True: 112k, False: 31.7k]
   ------------------
-  207|   111k|                        if (pushRank == promotionRank) {
+  207|   112k|                        if (pushRank == promotionRank) {
   ------------------
   |  Branch (207:29): [True: 434, False: 111k]
   ------------------
@@ -598,75 +598,75 @@ _ZNK5aleph5chess5Board19getPseudoLegalMovesEv:
   217|       |                            // both intermediate and destination squares are unoccupied.
   218|   111k|                            if (from.rank() == startingRank) {
   ------------------
-  |  Branch (218:33): [True: 74.0k, False: 37.0k]
+  |  Branch (218:33): [True: 73.7k, False: 38.0k]
   ------------------
-  219|  74.0k|                                uint8_t doublePushRank =
-  220|  74.0k|                                    static_cast<uint8_t>(from.rank() + pushDir * 2);
-  221|  74.0k|                                Square doublePushSq(doublePushRank, from.file());
-  222|  74.0k|                                uint64_t doublePushBit = 1ULL << static_cast<uint8_t>(doublePushSq);
-  223|  74.0k|                                if (!(occ & doublePushBit)) result += Move(from, doublePushSq);
+  219|  73.7k|                                uint8_t doublePushRank =
+  220|  73.7k|                                    static_cast<uint8_t>(from.rank() + pushDir * 2);
+  221|  73.7k|                                Square doublePushSq(doublePushRank, from.file());
+  222|  73.7k|                                uint64_t doublePushBit = 1ULL << static_cast<uint8_t>(doublePushSq);
+  223|  73.7k|                                if (!(occ & doublePushBit)) result += Move(from, doublePushSq);
   ------------------
-  |  Branch (223:37): [True: 69.4k, False: 4.62k]
+  |  Branch (223:37): [True: 69.2k, False: 4.54k]
   ------------------
-  224|  74.0k|                            }
+  224|  73.7k|                            }
   225|   111k|                        }
-  226|   111k|                    }
+  226|   112k|                    }
   227|       |
   228|       |                    // Diagonal captures — only onto squares occupied by enemy pieces.
   229|   143k|                    uint64_t captures =
   230|   143k|                        attackTables.movement[colorOffset + PAWN][fromIdx] & enemyOcc;
-  231|   158k|                    while (captures) {
+  231|   159k|                    while (captures) {
   ------------------
-  |  Branch (231:28): [True: 15.3k, False: 143k]
+  |  Branch (231:28): [True: 15.7k, False: 143k]
   ------------------
-  232|  15.3k|                        uint8_t toIdx  = static_cast<uint8_t>(platform::tzcnt(captures));
-  233|  15.3k|                        captures      &= captures - 1;
-  234|  15.3k|                        Square to(toIdx);
+  232|  15.7k|                        uint8_t toIdx  = static_cast<uint8_t>(platform::tzcnt(captures));
+  233|  15.7k|                        captures      &= captures - 1;
+  234|  15.7k|                        Square to(toIdx);
   235|       |
-  236|  15.3k|                        if (to.rank() == promotionRank) {
+  236|  15.7k|                        if (to.rank() == promotionRank) {
   ------------------
-  |  Branch (236:29): [True: 921, False: 14.4k]
+  |  Branch (236:29): [True: 865, False: 14.8k]
   ------------------
-  237|    921|                            result += Move(from, to, QUEEN);
-  238|    921|                            result += Move(from, to, ROOK);
-  239|    921|                            result += Move(from, to, BISHOP);
-  240|    921|                            result += Move(from, to, KNIGHT);
-  241|  14.4k|                        } else {
-  242|  14.4k|                            result += Move(from, to);
-  243|  14.4k|                        }
-  244|  15.3k|                    }
+  237|    865|                            result += Move(from, to, QUEEN);
+  238|    865|                            result += Move(from, to, ROOK);
+  239|    865|                            result += Move(from, to, BISHOP);
+  240|    865|                            result += Move(from, to, KNIGHT);
+  241|  14.8k|                        } else {
+  242|  14.8k|                            result += Move(from, to);
+  243|  14.8k|                        }
+  244|  15.7k|                    }
   245|       |
   246|       |                    // En passant — the pawn must be on the correct rank and adjacent file.
   247|   143k|                    if (isEnPassantValid()) {
   ------------------
-  |  Branch (247:25): [True: 12.5k, False: 131k]
+  |  Branch (247:25): [True: 12.4k, False: 131k]
   ------------------
-  248|  12.5k|                        uint8_t epFile = getEnPassantFile();
-  249|  12.5k|                        uint8_t epRank = blackTurn ? 2 : 5;
+  248|  12.4k|                        uint8_t epFile = getEnPassantFile();
+  249|  12.4k|                        uint8_t epRank = blackTurn ? 2 : 5;
   ------------------
-  |  Branch (249:42): [True: 6.41k, False: 6.08k]
+  |  Branch (249:42): [True: 6.37k, False: 6.08k]
   ------------------
-  250|  12.5k|                        if (from.rank() == static_cast<uint8_t>(epRank - pushDir) &&
+  250|  12.4k|                        if (from.rank() == static_cast<uint8_t>(epRank - pushDir) &&
   ------------------
-  |  Branch (250:29): [True: 248, False: 12.2k]
+  |  Branch (250:29): [True: 242, False: 12.2k]
   ------------------
-  251|    248|                            (from.file() == epFile - 1 || from.file() == epFile + 1)) {
+  251|    242|                            (from.file() == epFile - 1 || from.file() == epFile + 1)) {
   ------------------
-  |  Branch (251:30): [True: 42, False: 206]
-  |  Branch (251:59): [True: 45, False: 161]
+  |  Branch (251:30): [True: 42, False: 200]
+  |  Branch (251:59): [True: 43, False: 157]
   ------------------
-  252|     87|                            result += Move(from, Square(epRank, epFile));
-  253|     87|                        }
-  254|  12.5k|                    }
+  252|     85|                            result += Move(from, Square(epRank, epFile));
+  253|     85|                        }
+  254|  12.4k|                    }
   255|       |
   256|   170k|                } else if (pieceIdx == KING) {
   ------------------
-  |  Branch (256:28): [True: 24.4k, False: 146k]
+  |  Branch (256:28): [True: 24.4k, False: 145k]
   ------------------
   257|       |                    // Normal king moves — all squares in the attack table not occupied by own
   258|       |                    // pieces.
   259|  24.4k|                    uint64_t moves = attackTables.movement[colorOffset + KING][fromIdx] & ~ownOcc;
-  260|  93.6k|                    while (moves) {
+  260|  93.7k|                    while (moves) {
   ------------------
   |  Branch (260:28): [True: 69.2k, False: 24.4k]
   ------------------
@@ -679,255 +679,255 @@ _ZNK5aleph5chess5Board19getPseudoLegalMovesEv:
   267|       |                    // pass-through square validation is deferred to isLegalFast.
   268|  24.4k|                    if (!blackTurn) {
   ------------------
-  |  Branch (268:25): [True: 12.3k, False: 12.0k]
+  |  Branch (268:25): [True: 12.3k, False: 12.1k]
   ------------------
   269|  12.3k|                        if (canWhiteKingsideCastle()) {
   ------------------
-  |  Branch (269:29): [True: 6.68k, False: 5.64k]
+  |  Branch (269:29): [True: 6.64k, False: 5.68k]
   ------------------
-  270|  6.68k|                            constexpr uint64_t WK_PATH = (1ULL << 5) | (1ULL << 6);
-  271|  6.68k|                            if (!(occ & WK_PATH)) result += Move(from, Square(0, 6));
+  270|  6.64k|                            constexpr uint64_t WK_PATH = (1ULL << 5) | (1ULL << 6);
+  271|  6.64k|                            if (!(occ & WK_PATH)) result += Move(from, Square(0, 6));
   ------------------
-  |  Branch (271:33): [True: 1.48k, False: 5.20k]
+  |  Branch (271:33): [True: 1.49k, False: 5.15k]
   ------------------
-  272|  6.68k|                        }
+  272|  6.64k|                        }
   273|  12.3k|                        if (canWhiteQueensideCastle()) {
   ------------------
-  |  Branch (273:29): [True: 5.46k, False: 6.86k]
+  |  Branch (273:29): [True: 5.39k, False: 6.94k]
   ------------------
-  274|  5.46k|                            constexpr uint64_t WQ_PATH = (1ULL << 1) | (1ULL << 2) | (1ULL << 3);
-  275|  5.46k|                            if (!(occ & WQ_PATH)) result += Move(from, Square(0, 2));
+  274|  5.39k|                            constexpr uint64_t WQ_PATH = (1ULL << 1) | (1ULL << 2) | (1ULL << 3);
+  275|  5.39k|                            if (!(occ & WQ_PATH)) result += Move(from, Square(0, 2));
   ------------------
-  |  Branch (275:33): [True: 337, False: 5.12k]
+  |  Branch (275:33): [True: 335, False: 5.05k]
   ------------------
-  276|  5.46k|                        }
+  276|  5.39k|                        }
   277|  12.3k|                    } else {
-  278|  12.0k|                        if (canBlackKingsideCastle()) {
+  278|  12.1k|                        if (canBlackKingsideCastle()) {
   ------------------
-  |  Branch (278:29): [True: 6.61k, False: 5.48k]
+  |  Branch (278:29): [True: 6.49k, False: 5.60k]
   ------------------
-  279|  6.61k|                            constexpr uint64_t BK_PATH = (1ULL << 61) | (1ULL << 62);
-  280|  6.61k|                            if (!(occ & BK_PATH)) result += Move(from, Square(7, 6));
+  279|  6.49k|                            constexpr uint64_t BK_PATH = (1ULL << 61) | (1ULL << 62);
+  280|  6.49k|                            if (!(occ & BK_PATH)) result += Move(from, Square(7, 6));
   ------------------
-  |  Branch (280:33): [True: 1.35k, False: 5.26k]
+  |  Branch (280:33): [True: 1.32k, False: 5.17k]
   ------------------
-  281|  6.61k|                        }
-  282|  12.0k|                        if (canBlackQueensideCastle()) {
+  281|  6.49k|                        }
+  282|  12.1k|                        if (canBlackQueensideCastle()) {
   ------------------
-  |  Branch (282:29): [True: 6.50k, False: 5.59k]
+  |  Branch (282:29): [True: 6.33k, False: 5.77k]
   ------------------
-  283|  6.50k|                            constexpr uint64_t BQ_PATH = (1ULL << 57) | (1ULL << 58) | (1ULL << 59);
-  284|  6.50k|                            if (!(occ & BQ_PATH)) result += Move(from, Square(7, 2));
+  283|  6.33k|                            constexpr uint64_t BQ_PATH = (1ULL << 57) | (1ULL << 58) | (1ULL << 59);
+  284|  6.33k|                            if (!(occ & BQ_PATH)) result += Move(from, Square(7, 2));
   ------------------
-  |  Branch (284:33): [True: 584, False: 5.91k]
+  |  Branch (284:33): [True: 458, False: 5.87k]
   ------------------
-  285|  6.50k|                        }
-  286|  12.0k|                    }
+  285|  6.33k|                        }
+  286|  12.1k|                    }
   287|       |
-  288|   146k|                } else {
+  288|   145k|                } else {
   289|       |                    // Knights, bishops, rooks, queens — emit all squares in the attack
   290|       |                    // table not occupied by own pieces. Slider path validity is not checked
   291|       |                    // here; isLegalFast filters moves that pass through intervening pieces.
-  292|   146k|                    uint64_t moves =
-  293|   146k|                        attackTables.movement[colorOffset + pieceIdx][fromIdx] & ~ownOcc;
+  292|   145k|                    uint64_t moves =
+  293|   145k|                        attackTables.movement[colorOffset + pieceIdx][fromIdx] & ~ownOcc;
   294|  1.23M|                    while (moves) {
   ------------------
-  |  Branch (294:28): [True: 1.09M, False: 146k]
+  |  Branch (294:28): [True: 1.08M, False: 145k]
   ------------------
-  295|  1.09M|                        uint8_t toIdx  = static_cast<uint8_t>(platform::tzcnt(moves));
-  296|  1.09M|                        moves         &= moves - 1;
-  297|  1.09M|                        result        += Move(from, Square(toIdx));
-  298|  1.09M|                    }
-  299|   146k|                }
+  295|  1.08M|                        uint8_t toIdx  = static_cast<uint8_t>(platform::tzcnt(moves));
+  296|  1.08M|                        moves         &= moves - 1;
+  297|  1.08M|                        result        += Move(from, Square(toIdx));
+  298|  1.08M|                    }
+  299|   145k|                }
   300|   314k|            }
   301|   146k|        }
   302|       |
   303|  24.4k|        return result;
   304|  24.4k|    }
 _ZN5aleph5chess6detail12isAttackedByEhmRKSt5arrayImLm6EEb:
-   36|   789k|                                               bool attackersAreBlack) {
-   37|   789k|            uint64_t sqBit = 1ULL << sqIdx;
+   36|   783k|                                               bool attackersAreBlack) {
+   37|   783k|            uint64_t sqBit = 1ULL << sqIdx;
    38|       |
    39|       |            // Pawn attack tables are asymmetric — index 0..5 are white, 6..11 are black.
    40|       |            // Piece(PAWN, !attackersAreBlack) exploits the Piece index encoding to select
    41|       |            // the correct table: white pawns at index 0, black at index 6.
-   42|   789k|            if (attackTables.movement[Piece(PAWN, !attackersAreBlack)][sqIdx] & attackers[PAWN])
+   42|   783k|            if (attackTables.movement[Piece(PAWN, !attackersAreBlack)][sqIdx] & attackers[PAWN])
   ------------------
-  |  Branch (42:17): [True: 9.65k, False: 779k]
+  |  Branch (42:17): [True: 9.28k, False: 774k]
   ------------------
-   43|  9.65k|                return true;
+   43|  9.28k|                return true;
    44|       |
    45|       |            // Knights and kings use symmetric attack tables — lookup from sqIdx directly.
-   46|   779k|            if (attackTables.movement[KNIGHT][sqIdx] & attackers[KNIGHT]) return true;
+   46|   774k|            if (attackTables.movement[KNIGHT][sqIdx] & attackers[KNIGHT]) return true;
   ------------------
-  |  Branch (46:17): [True: 6.28k, False: 773k]
+  |  Branch (46:17): [True: 6.23k, False: 767k]
   ------------------
-   47|   773k|            if (attackTables.movement[KING][sqIdx] & attackers[KING]) return true;
+   47|   767k|            if (attackTables.movement[KING][sqIdx] & attackers[KING]) return true;
   ------------------
-  |  Branch (47:17): [True: 1.90k, False: 771k]
+  |  Branch (47:17): [True: 1.90k, False: 765k]
   ------------------
    48|       |
-   49|   771k|            uint64_t bishopLike = bishopAttacks(sqIdx, occ);
-   50|   771k|            if (bishopLike & (attackers[BISHOP] | attackers[QUEEN])) return true;
+   49|   765k|            uint64_t bishopLike = bishopAttacks(sqIdx, occ);
+   50|   765k|            if (bishopLike & (attackers[BISHOP] | attackers[QUEEN])) return true;
   ------------------
-  |  Branch (50:17): [True: 16.6k, False: 754k]
+  |  Branch (50:17): [True: 16.4k, False: 749k]
   ------------------
    51|       |
-   52|   754k|            uint64_t rookLike = rookAttacks(sqIdx, occ);
-   53|   754k|            if (rookLike & (attackers[ROOK] | attackers[QUEEN])) return true;
+   52|   749k|            uint64_t rookLike = rookAttacks(sqIdx, occ);
+   53|   749k|            if (rookLike & (attackers[ROOK] | attackers[QUEEN])) return true;
   ------------------
-  |  Branch (53:17): [True: 29.3k, False: 725k]
+  |  Branch (53:17): [True: 28.6k, False: 720k]
   ------------------
    54|       |
-   55|   725k|            return false;
-   56|   754k|        }
+   55|   720k|            return false;
+   56|   749k|        }
 _ZNK5aleph5chess5Board11isLegalFastENS0_4MoveE:
-   88|  1.36M|    bool Board::isLegalFast(Move m) const {
-   89|  1.36M|        Square from                = m.from();
-   90|  1.36M|        Square to                  = m.to();
+   88|  1.35M|    bool Board::isLegalFast(Move m) const {
+   89|  1.35M|        Square from                = m.from();
+   90|  1.35M|        Square to                  = m.to();
    91|       |
-   92|  1.36M|        uint8_t fromIdx            = static_cast<uint8_t>(from);
-   93|  1.36M|        uint8_t toIdx              = static_cast<uint8_t>(to);
-   94|  1.36M|        uint64_t fromBit           = 1ULL << fromIdx;
-   95|  1.36M|        uint64_t toBit             = 1ULL << toIdx;
+   92|  1.35M|        uint8_t fromIdx            = static_cast<uint8_t>(from);
+   93|  1.35M|        uint8_t toIdx              = static_cast<uint8_t>(to);
+   94|  1.35M|        uint64_t fromBit           = 1ULL << fromIdx;
+   95|  1.35M|        uint64_t toBit             = 1ULL << toIdx;
    96|       |
-   97|  1.36M|        bool blackTurn             = isBlackTurn();
+   97|  1.35M|        bool blackTurn             = isBlackTurn();
    98|       |
-   99|  1.36M|        const auto& ownBitboards   = blackTurn ? blackBitboards : whiteBitboards;
+   99|  1.35M|        const auto& ownBitboards   = blackTurn ? blackBitboards : whiteBitboards;
   ------------------
-  |  Branch (99:38): [True: 699k, False: 667k]
+  |  Branch (99:38): [True: 694k, False: 663k]
   ------------------
-  100|  1.36M|        const auto& enemyBitboards = blackTurn ? whiteBitboards : blackBitboards;
+  100|  1.35M|        const auto& enemyBitboards = blackTurn ? whiteBitboards : blackBitboards;
   ------------------
-  |  Branch (100:38): [True: 699k, False: 667k]
+  |  Branch (100:38): [True: 694k, False: 663k]
   ------------------
   101|       |
-  102|  1.36M|        uint64_t ownOcc            = blackTurn ? getBlackOccupancy() : getWhiteOccupancy();
+  102|  1.35M|        uint64_t ownOcc            = blackTurn ? getBlackOccupancy() : getWhiteOccupancy();
   ------------------
-  |  Branch (102:38): [True: 699k, False: 667k]
+  |  Branch (102:38): [True: 694k, False: 663k]
   ------------------
-  103|  1.36M|        uint64_t enemyOcc          = blackTurn ? getWhiteOccupancy() : getBlackOccupancy();
+  103|  1.35M|        uint64_t enemyOcc          = blackTurn ? getWhiteOccupancy() : getBlackOccupancy();
   ------------------
-  |  Branch (103:38): [True: 699k, False: 667k]
+  |  Branch (103:38): [True: 694k, False: 663k]
   ------------------
-  104|  1.36M|        uint64_t occ               = getOccupancy();
+  104|  1.35M|        uint64_t occ               = getOccupancy();
   105|       |
   106|       |        // Own-piece captures are never legal.
-  107|  1.36M|        if (ownOcc & toBit) return false;
+  107|  1.35M|        if (ownOcc & toBit) return false;
   ------------------
-  |  Branch (107:13): [True: 0, False: 1.36M]
+  |  Branch (107:13): [True: 0, False: 1.35M]
   ------------------
   108|       |
-  109|  1.36M|        PieceType movingPiece = get(from).type();
-  110|  1.36M|        if (movingPiece == NONE) return false;
+  109|  1.35M|        PieceType movingPiece = get(from).type();
+  110|  1.35M|        if (movingPiece == NONE) return false;
   ------------------
-  |  Branch (110:13): [True: 0, False: 1.36M]
+  |  Branch (110:13): [True: 0, False: 1.35M]
   ------------------
   111|       |
   112|       |        // Sliders must be aligned with the target square and have a clear path.
   113|       |        // The movement table gives unblocked rays; the between table gives the
   114|       |        // squares that must be empty for the move to be geometrically valid.
-  115|  1.36M|        if ((movingPiece == BISHOP || movingPiece == ROOK || movingPiece == QUEEN) &&
+  115|  1.35M|        if ((movingPiece == BISHOP || movingPiece == ROOK || movingPiece == QUEEN) &&
   ------------------
-  |  Branch (115:14): [True: 226k, False: 1.14M]
-  |  Branch (115:39): [True: 364k, False: 775k]
-  |  Branch (115:62): [True: 379k, False: 395k]
+  |  Branch (115:14): [True: 225k, False: 1.13M]
+  |  Branch (115:39): [True: 361k, False: 771k]
+  |  Branch (115:62): [True: 375k, False: 396k]
   ------------------
-  116|   970k|            attackTables.between[fromIdx][toIdx] & occ) {
+  116|   962k|            attackTables.between[fromIdx][toIdx] & occ) {
   ------------------
-  |  Branch (116:13): [True: 583k, False: 387k]
+  |  Branch (116:13): [True: 580k, False: 381k]
   ------------------
-  117|   583k|            return false;
-  118|   583k|        }
+  117|   580k|            return false;
+  118|   580k|        }
   119|       |
   120|       |        // Simulate the post-move board state without constructing a full Board object.
   121|       |        // The moving piece is removed from its origin and placed on the destination.
   122|       |        // Any enemy piece on the destination is removed from enemy occupancy.
-  123|   783k|        uint64_t newOwnOcc     = (ownOcc & ~fromBit) | toBit;
-  124|   783k|        uint64_t newEnemyOcc   = enemyOcc & ~toBit;
+  123|   778k|        uint64_t newOwnOcc     = (ownOcc & ~fromBit) | toBit;
+  124|   778k|        uint64_t newEnemyOcc   = enemyOcc & ~toBit;
   125|       |
   126|       |        // En passant additionally removes the captured pawn from the rank it sits on,
   127|       |        // which is one rank behind the destination from the moving side's perspective.
-  128|   783k|        uint64_t epCapturedBit = 0;
-  129|   783k|        if (movingPiece == PAWN && isEnPassantValid()) {
+  128|   778k|        uint64_t epCapturedBit = 0;
+  129|   778k|        if (movingPiece == PAWN && isEnPassantValid()) {
   ------------------
-  |  Branch (129:13): [True: 200k, False: 582k]
-  |  Branch (129:36): [True: 21.4k, False: 179k]
+  |  Branch (129:13): [True: 201k, False: 576k]
+  |  Branch (129:36): [True: 21.2k, False: 179k]
   ------------------
-  130|  21.4k|            uint8_t epFile = getEnPassantFile();
-  131|  21.4k|            if (to.file() == epFile && from.file() != epFile) {
+  130|  21.2k|            uint8_t epFile = getEnPassantFile();
+  131|  21.2k|            if (to.file() == epFile && from.file() != epFile) {
   ------------------
-  |  Branch (131:17): [True: 2.83k, False: 18.5k]
-  |  Branch (131:40): [True: 524, False: 2.30k]
+  |  Branch (131:17): [True: 2.80k, False: 18.4k]
+  |  Branch (131:40): [True: 514, False: 2.29k]
   ------------------
-  132|    524|                uint8_t capturedRank = blackTurn ? static_cast<uint8_t>(to.rank() + 1)
+  132|    514|                uint8_t capturedRank = blackTurn ? static_cast<uint8_t>(to.rank() + 1)
   ------------------
-  |  Branch (132:40): [True: 206, False: 318]
+  |  Branch (132:40): [True: 202, False: 312]
   ------------------
-  133|    524|                                                 : static_cast<uint8_t>(to.rank() - 1);
-  134|    524|                Square capturedSq(capturedRank, epFile);
-  135|    524|                epCapturedBit  = 1ULL << static_cast<uint8_t>(capturedSq);
-  136|    524|                newEnemyOcc   &= ~epCapturedBit;
-  137|    524|            }
-  138|  21.4k|        }
+  133|    514|                                                 : static_cast<uint8_t>(to.rank() - 1);
+  134|    514|                Square capturedSq(capturedRank, epFile);
+  135|    514|                epCapturedBit  = 1ULL << static_cast<uint8_t>(capturedSq);
+  136|    514|                newEnemyOcc   &= ~epCapturedBit;
+  137|    514|            }
+  138|  21.2k|        }
   139|       |
-  140|   783k|        uint64_t newOcc = newOwnOcc | newEnemyOcc;
+  140|   778k|        uint64_t newOcc = newOwnOcc | newEnemyOcc;
   141|       |
   142|       |        // After a king move the king square is the destination, not the origin.
-  143|   783k|        uint64_t kingBB = ownBitboards[KING];
-  144|   783k|        if (movingPiece == KING) kingBB = toBit;
+  143|   778k|        uint64_t kingBB = ownBitboards[KING];
+  144|   778k|        if (movingPiece == KING) kingBB = toBit;
   ------------------
-  |  Branch (144:13): [True: 73.0k, False: 710k]
+  |  Branch (144:13): [True: 72.8k, False: 705k]
   ------------------
-  145|   783k|        uint8_t kingSqIdx = static_cast<uint8_t>(platform::tzcnt(kingBB));
+  145|   778k|        uint8_t kingSqIdx = static_cast<uint8_t>(platform::tzcnt(kingBB));
   146|       |
-  147|   783k|        if (movingPiece == KING) {
+  147|   778k|        if (movingPiece == KING) {
   ------------------
-  |  Branch (147:13): [True: 73.0k, False: 710k]
+  |  Branch (147:13): [True: 72.8k, False: 705k]
   ------------------
-  148|  73.0k|            int8_t fileDelta = static_cast<int8_t>(to.file()) - static_cast<int8_t>(from.file());
-  149|  73.0k|            if (fileDelta == 2 || fileDelta == -2) {
+  148|  72.8k|            int8_t fileDelta = static_cast<int8_t>(to.file()) - static_cast<int8_t>(from.file());
+  149|  72.8k|            if (fileDelta == 2 || fileDelta == -2) {
   ------------------
-  |  Branch (149:17): [True: 2.83k, False: 70.1k]
-  |  Branch (149:35): [True: 921, False: 69.2k]
+  |  Branch (149:17): [True: 2.81k, False: 70.0k]
+  |  Branch (149:35): [True: 793, False: 69.2k]
   ------------------
-  150|  3.75k|                uint8_t passingFile  = static_cast<uint8_t>(from.file() + (fileDelta > 0 ? 1 : -1));
+  150|  3.60k|                uint8_t passingFile  = static_cast<uint8_t>(from.file() + (fileDelta > 0 ? 1 : -1));
   ------------------
-  |  Branch (150:76): [True: 2.83k, False: 921]
+  |  Branch (150:76): [True: 2.81k, False: 793]
   ------------------
-  151|  3.75k|                uint8_t passingSqIdx = static_cast<uint8_t>(Square(from.rank(), passingFile));
+  151|  3.60k|                uint8_t passingSqIdx = static_cast<uint8_t>(Square(from.rank(), passingFile));
   152|       |
   153|       |                // The from-square check uses original occupancy since the king has not
   154|       |                // yet moved. The passing-square check uses newOcc with the king removed
   155|       |                // from its origin.
-  156|  3.75k|                if (detail::isAttackedBy(fromIdx, occ, enemyBitboards, !blackTurn)) return false;
+  156|  3.60k|                if (detail::isAttackedBy(fromIdx, occ, enemyBitboards, !blackTurn)) return false;
   ------------------
-  |  Branch (156:21): [True: 315, False: 3.44k]
+  |  Branch (156:21): [True: 313, False: 3.29k]
   ------------------
-  157|  3.44k|                if (detail::isAttackedBy(passingSqIdx, newOcc, enemyBitboards, !blackTurn))
+  157|  3.29k|                if (detail::isAttackedBy(passingSqIdx, newOcc, enemyBitboards, !blackTurn))
   ------------------
-  |  Branch (157:21): [True: 1.26k, False: 2.17k]
+  |  Branch (157:21): [True: 1.24k, False: 2.04k]
   ------------------
-  158|  1.26k|                    return false;
-  159|  3.44k|            }
-  160|  73.0k|        }
+  158|  1.24k|                    return false;
+  159|  3.29k|            }
+  160|  72.8k|        }
   161|       |
   162|       |        // Build the post-move enemy bitboards, removing any piece captured on the
   163|       |        // destination square and any pawn captured via en passant.
-  164|   781k|        std::array<uint64_t, 6> enemyBB;
-  165|  5.47M|        for (int i = 0; i < 6; i++) enemyBB[i] = enemyBitboards[i] & ~toBit & ~epCapturedBit;
+  164|   776k|        std::array<uint64_t, 6> enemyBB;
+  165|  5.43M|        for (int i = 0; i < 6; i++) enemyBB[i] = enemyBitboards[i] & ~toBit & ~epCapturedBit;
   ------------------
-  |  Branch (165:25): [True: 4.69M, False: 781k]
+  |  Branch (165:25): [True: 4.65M, False: 776k]
   ------------------
   166|       |
   167|       |        // Verify the king is not in check on the post-move board.
-  168|   781k|        if (detail::isAttackedBy(kingSqIdx, newOcc, enemyBB, !blackTurn)) return false;
+  168|   776k|        if (detail::isAttackedBy(kingSqIdx, newOcc, enemyBB, !blackTurn)) return false;
   ------------------
-  |  Branch (168:13): [True: 62.2k, False: 719k]
+  |  Branch (168:13): [True: 60.9k, False: 715k]
   ------------------
   169|       |
-  170|   719k|        return true;
-  171|   781k|    }
+  170|   715k|        return true;
+  171|   776k|    }
 
 _ZNK5aleph5chess5Board11getCheckersEv:
    28|  24.4k|    std::uint64_t Board::getCheckers() const {
@@ -1000,17 +1000,17 @@ _ZNK5aleph5chess5Board11getCheckersEv:
    68|  24.4k|        return _checkers;
    69|  24.4k|    }
 _ZNK5aleph5chess5Board17getWhiteOccupancyEv:
-   18|  4.28M|    std::uint64_t Board::getWhiteOccupancy() const {
-   19|  4.28M|        return whiteBitboards[0] | whiteBitboards[1] | whiteBitboards[2] | whiteBitboards[3] |
-   20|  4.28M|               whiteBitboards[4] | whiteBitboards[5];
-   21|  4.28M|    }
+   18|  4.25M|    std::uint64_t Board::getWhiteOccupancy() const {
+   19|  4.25M|        return whiteBitboards[0] | whiteBitboards[1] | whiteBitboards[2] | whiteBitboards[3] |
+   20|  4.25M|               whiteBitboards[4] | whiteBitboards[5];
+   21|  4.25M|    }
 _ZNK5aleph5chess5Board17getBlackOccupancyEv:
-   23|  4.28M|    std::uint64_t Board::getBlackOccupancy() const {
-   24|  4.28M|        return blackBitboards[0] | blackBitboards[1] | blackBitboards[2] | blackBitboards[3] |
-   25|  4.28M|               blackBitboards[4] | blackBitboards[5];
-   26|  4.28M|    }
+   23|  4.25M|    std::uint64_t Board::getBlackOccupancy() const {
+   24|  4.25M|        return blackBitboards[0] | blackBitboards[1] | blackBitboards[2] | blackBitboards[3] |
+   25|  4.25M|               blackBitboards[4] | blackBitboards[5];
+   26|  4.25M|    }
 _ZNK5aleph5chess5Board12getOccupancyEv:
-   16|  2.80M|    std::uint64_t Board::getOccupancy() const { return getWhiteOccupancy() | getBlackOccupancy(); }
+   16|  2.79M|    std::uint64_t Board::getOccupancy() const { return getWhiteOccupancy() | getBlackOccupancy(); }
 
 _ZNK5aleph5chess5Board4pushENS0_4MoveE:
    12|  24.4k|    Board Board::push(Move m) const {
@@ -1030,11 +1030,11 @@ _ZNK5aleph5chess5Board4pushENS0_4MoveE:
    26|       |
    27|  24.4k|        auto& ownBitboards    = blackTurn ? next.blackBitboards : next.whiteBitboards;
   ------------------
-  |  Branch (27:33): [True: 12.0k, False: 12.3k]
+  |  Branch (27:33): [True: 12.1k, False: 12.3k]
   ------------------
    28|  24.4k|        auto& enemyBitboards  = blackTurn ? next.whiteBitboards : next.blackBitboards;
   ------------------
-  |  Branch (28:33): [True: 12.0k, False: 12.3k]
+  |  Branch (28:33): [True: 12.1k, False: 12.3k]
   ------------------
    29|       |
    30|  24.4k|        PieceType movingPiece = get(from).type();
@@ -1045,7 +1045,7 @@ _ZNK5aleph5chess5Board4pushENS0_4MoveE:
    35|  24.4k|        next.metadata &= ~(EN_PASSANT_FILE_MASK | EN_PASSANT_VALID);
    36|       |
    37|       |        // Remove any enemy piece on the destination square.
-   38|   170k|        for (int i = 0; i < 6; i++) enemyBitboards[i] &= ~toBit;
+   38|   171k|        for (int i = 0; i < 6; i++) enemyBitboards[i] &= ~toBit;
   ------------------
   |  Branch (38:25): [True: 146k, False: 24.4k]
   ------------------
@@ -1054,10 +1054,10 @@ _ZNK5aleph5chess5Board4pushENS0_4MoveE:
    41|  24.4k|        ownBitboards[movingPiece] &= ~fromBit;
    42|  24.4k|        if (m.hasPromo())
   ------------------
-  |  Branch (42:13): [True: 225, False: 24.2k]
+  |  Branch (42:13): [True: 214, False: 24.2k]
   ------------------
    43|       |            // Replace the pawn with the promoted piece type.
-   44|    225|            ownBitboards[m.promo()] |= toBit;
+   44|    214|            ownBitboards[m.promo()] |= toBit;
    45|  24.2k|        else
    46|  24.2k|            ownBitboards[movingPiece] |= toBit;
    47|       |
@@ -1066,21 +1066,21 @@ _ZNK5aleph5chess5Board4pushENS0_4MoveE:
    50|       |        // Castling rights in metadata are trusted as authoritative.
    51|  24.4k|        if (movingPiece == KING) {
   ------------------
-  |  Branch (51:13): [True: 2.65k, False: 21.7k]
+  |  Branch (51:13): [True: 2.74k, False: 21.6k]
   ------------------
-   52|  2.65k|            int8_t fileDelta = static_cast<int8_t>(to.file()) - static_cast<int8_t>(from.file());
-   53|  2.65k|            if (fileDelta == 2) {
+   52|  2.74k|            int8_t fileDelta = static_cast<int8_t>(to.file()) - static_cast<int8_t>(from.file());
+   53|  2.74k|            if (fileDelta == 2) {
   ------------------
-  |  Branch (53:17): [True: 3, False: 2.65k]
+  |  Branch (53:17): [True: 4, False: 2.74k]
   ------------------
    54|       |                // Kingside — rook moves from h-file to f-file.
-   55|      3|                Square rookFrom(from.rank(), 7);
-   56|      3|                Square rookTo(from.rank(), 5);
-   57|      3|                ownBitboards[ROOK] &= ~(1ULL << static_cast<uint8_t>(rookFrom));
-   58|      3|                ownBitboards[ROOK] |= (1ULL << static_cast<uint8_t>(rookTo));
-   59|  2.65k|            } else if (fileDelta == -2) {
+   55|      4|                Square rookFrom(from.rank(), 7);
+   56|      4|                Square rookTo(from.rank(), 5);
+   57|      4|                ownBitboards[ROOK] &= ~(1ULL << static_cast<uint8_t>(rookFrom));
+   58|      4|                ownBitboards[ROOK] |= (1ULL << static_cast<uint8_t>(rookTo));
+   59|  2.74k|            } else if (fileDelta == -2) {
   ------------------
-  |  Branch (59:24): [True: 3, False: 2.65k]
+  |  Branch (59:24): [True: 3, False: 2.74k]
   ------------------
    60|       |                // Queenside — rook moves from a-file to d-file.
    61|      3|                Square rookFrom(from.rank(), 0);
@@ -1088,18 +1088,18 @@ _ZNK5aleph5chess5Board4pushENS0_4MoveE:
    63|      3|                ownBitboards[ROOK] &= ~(1ULL << static_cast<uint8_t>(rookFrom));
    64|      3|                ownBitboards[ROOK] |= (1ULL << static_cast<uint8_t>(rookTo));
    65|      3|            }
-   66|  2.65k|        }
+   66|  2.74k|        }
    67|       |
    68|  24.4k|        bool isEP = movingPiece == PAWN && isEnPassantValid() && to.file() == getEnPassantFile() &&
   ------------------
-  |  Branch (68:21): [True: 6.64k, False: 17.7k]
-  |  Branch (68:44): [True: 989, False: 5.65k]
-  |  Branch (68:66): [True: 278, False: 711]
+  |  Branch (68:21): [True: 6.61k, False: 17.8k]
+  |  Branch (68:44): [True: 984, False: 5.63k]
+  |  Branch (68:66): [True: 281, False: 703]
   ------------------
-   69|    278|                    from.file() != to.file() && !(getOccupancy() & toBit);
+   69|    281|                    from.file() != to.file() && !(getOccupancy() & toBit);
   ------------------
-  |  Branch (69:21): [True: 62, False: 216]
-  |  Branch (69:49): [True: 23, False: 39]
+  |  Branch (69:21): [True: 63, False: 218]
+  |  Branch (69:49): [True: 22, False: 41]
   ------------------
    70|       |
    71|       |        // --- En passant ---
@@ -1107,34 +1107,34 @@ _ZNK5aleph5chess5Board4pushENS0_4MoveE:
    73|       |        // square triggers removal of the captured pawn from the rank behind the target.
    74|  24.4k|        if (movingPiece == PAWN) {
   ------------------
-  |  Branch (74:13): [True: 6.64k, False: 17.7k]
+  |  Branch (74:13): [True: 6.61k, False: 17.8k]
   ------------------
-   75|  6.64k|            int8_t rankDelta = static_cast<int8_t>(to.rank()) - static_cast<int8_t>(from.rank());
-   76|  6.64k|            if (rankDelta == 2 || rankDelta == -2) {
+   75|  6.61k|            int8_t rankDelta = static_cast<int8_t>(to.rank()) - static_cast<int8_t>(from.rank());
+   76|  6.61k|            if (rankDelta == 2 || rankDelta == -2) {
   ------------------
-  |  Branch (76:17): [True: 825, False: 5.82k]
-  |  Branch (76:35): [True: 814, False: 5.00k]
+  |  Branch (76:17): [True: 819, False: 5.79k]
+  |  Branch (76:35): [True: 814, False: 4.98k]
   ------------------
    77|       |                // Double push — record the en passant file for the opponent.
    78|  1.63k|                next.metadata |= EN_PASSANT_VALID;
    79|  1.63k|                next.metadata |= (to.file() & EN_PASSANT_FILE_MASK);
    80|  1.63k|            }
    81|       |
-   82|  6.64k|            if (isEP) {
+   82|  6.61k|            if (isEP) {
   ------------------
-  |  Branch (82:17): [True: 23, False: 6.62k]
+  |  Branch (82:17): [True: 22, False: 6.59k]
   ------------------
    83|       |                // En passant capture — remove the captured pawn from the rank it sits on,
    84|       |                // which is one rank behind the destination from the moving side's perspective.
-   85|     23|                uint8_t capturedRank = blackTurn ? static_cast<uint8_t>(to.rank() + 1)
+   85|     22|                uint8_t capturedRank = blackTurn ? static_cast<uint8_t>(to.rank() + 1)
   ------------------
-  |  Branch (85:40): [True: 10, False: 13]
+  |  Branch (85:40): [True: 10, False: 12]
   ------------------
-   86|     23|                                                 : static_cast<uint8_t>(to.rank() - 1);
-   87|     23|                Square capturedSq(capturedRank, to.file());
-   88|     23|                enemyBitboards[PAWN] &= ~(1ULL << static_cast<uint8_t>(capturedSq));
-   89|     23|            }
-   90|  6.64k|        }
+   86|     22|                                                 : static_cast<uint8_t>(to.rank() - 1);
+   87|     22|                Square capturedSq(capturedRank, to.file());
+   88|     22|                enemyBitboards[PAWN] &= ~(1ULL << static_cast<uint8_t>(capturedSq));
+   89|     22|            }
+   90|  6.61k|        }
    91|       |
    92|       |        // --- Castling rights ---
    93|       |        // Any move from or to a rook's starting square clears the corresponding right,
@@ -1148,31 +1148,31 @@ _ZNK5aleph5chess5Board4pushENS0_4MoveE:
   101|       |
   102|  24.4k|        if (fromIdx == E1) next.metadata &= ~(WHITE_KINGSIDE_CASTLE | WHITE_QUEENSIDE_CASTLE);
   ------------------
-  |  Branch (102:13): [True: 634, False: 23.7k]
+  |  Branch (102:13): [True: 637, False: 23.8k]
   ------------------
   103|  24.4k|        if (fromIdx == E8) next.metadata &= ~(BLACK_KINGSIDE_CASTLE | BLACK_QUEENSIDE_CASTLE);
   ------------------
-  |  Branch (103:13): [True: 384, False: 24.0k]
+  |  Branch (103:13): [True: 389, False: 24.0k]
   ------------------
   104|  24.4k|        if (fromIdx == H1 || toIdx == H1) next.metadata &= ~WHITE_KINGSIDE_CASTLE;
   ------------------
-  |  Branch (104:13): [True: 453, False: 23.9k]
-  |  Branch (104:30): [True: 386, False: 23.5k]
+  |  Branch (104:13): [True: 459, False: 23.9k]
+  |  Branch (104:30): [True: 394, False: 23.5k]
   ------------------
   105|  24.4k|        if (fromIdx == A1 || toIdx == A1) next.metadata &= ~WHITE_QUEENSIDE_CASTLE;
   ------------------
-  |  Branch (105:13): [True: 960, False: 23.4k]
-  |  Branch (105:30): [True: 948, False: 22.5k]
+  |  Branch (105:13): [True: 933, False: 23.5k]
+  |  Branch (105:30): [True: 915, False: 22.5k]
   ------------------
   106|  24.4k|        if (fromIdx == H8 || toIdx == H8) next.metadata &= ~BLACK_KINGSIDE_CASTLE;
   ------------------
-  |  Branch (106:13): [True: 343, False: 24.0k]
-  |  Branch (106:30): [True: 277, False: 23.8k]
+  |  Branch (106:13): [True: 347, False: 24.0k]
+  |  Branch (106:30): [True: 278, False: 23.8k]
   ------------------
   107|  24.4k|        if (fromIdx == A8 || toIdx == A8) next.metadata &= ~BLACK_QUEENSIDE_CASTLE;
   ------------------
-  |  Branch (107:13): [True: 427, False: 23.9k]
-  |  Branch (107:30): [True: 330, False: 23.6k]
+  |  Branch (107:13): [True: 438, False: 24.0k]
+  |  Branch (107:30): [True: 342, False: 23.6k]
   ------------------
   108|       |
   109|       |        // --- Halfmove clock ---
@@ -1181,15 +1181,15 @@ _ZNK5aleph5chess5Board4pushENS0_4MoveE:
   112|  24.4k|        bool isCapture =
   113|  24.4k|            isEP | (((blackTurn ? getWhiteOccupancy() : getBlackOccupancy()) & toBit) != 0);
   ------------------
-  |  Branch (113:23): [True: 12.0k, False: 12.3k]
+  |  Branch (113:23): [True: 12.1k, False: 12.3k]
   ------------------
   114|       |
   115|  24.4k|        if (movingPiece == PAWN || isCapture) {
   ------------------
-  |  Branch (115:13): [True: 6.64k, False: 17.7k]
-  |  Branch (115:36): [True: 832, False: 16.9k]
+  |  Branch (115:13): [True: 6.61k, False: 17.8k]
+  |  Branch (115:36): [True: 855, False: 16.9k]
   ------------------
-  116|  7.48k|            next.metadata &= ~HALF_MOVE_CLOCK;
+  116|  7.47k|            next.metadata &= ~HALF_MOVE_CLOCK;
   117|  16.9k|        } else {
   118|  16.9k|            uint32_t clock = getHalfMoveClock() + 1;
   119|  16.9k|            next.metadata  = (next.metadata & ~HALF_MOVE_CLOCK) | ((clock << 9) & HALF_MOVE_CLOCK);
@@ -1203,74 +1203,74 @@ _ZNK5aleph5chess5Board4pushENS0_4MoveE:
   127|  24.4k|    }
 
 _ZN5aleph5chess6detail13bishopAttacksENS0_6SquareEm:
-   56|   771k|        [[nodiscard]] inline constexpr uint64_t bishopAttacks(Square sq, uint64_t occ) {
-   57|   771k|            return rayAttackForward(occ, NE, sq) | rayAttackForward(occ, NW, sq) |
-   58|   771k|                   rayAttackBackward(occ, SE, sq) | rayAttackBackward(occ, SW, sq);
-   59|   771k|        }
+   56|   765k|        [[nodiscard]] inline constexpr uint64_t bishopAttacks(Square sq, uint64_t occ) {
+   57|   765k|            return rayAttackForward(occ, NE, sq) | rayAttackForward(occ, NW, sq) |
+   58|   765k|                   rayAttackBackward(occ, SE, sq) | rayAttackBackward(occ, SW, sq);
+   59|   765k|        }
 _ZN5aleph5chess6detail16rayAttackForwardEmNS1_9DirectionENS0_6SquareE:
-   24|  3.05M|                                                                 Square sq) {
-   25|  3.05M|            DEBUG_ASSERT(d == N || d == E || d == NE || d == NW);
-   26|  3.05M|            uint64_t ray      = attackTables.rays[d][sq];
-   27|  3.05M|            uint64_t blockers = ray & occ;
+   24|  3.03M|                                                                 Square sq) {
+   25|  3.03M|            DEBUG_ASSERT(d == N || d == E || d == NE || d == NW);
+   26|  3.03M|            uint64_t ray      = attackTables.rays[d][sq];
+   27|  3.03M|            uint64_t blockers = ray & occ;
    28|       |
-   29|  3.05M|            auto first        = static_cast<Square>(platform::tzcnt(blockers | (1ULL << 63)));
-   30|  3.05M|            uint64_t cut      = attackTables.rays[d][first];
+   29|  3.03M|            auto first        = static_cast<Square>(platform::tzcnt(blockers | (1ULL << 63)));
+   30|  3.03M|            uint64_t cut      = attackTables.rays[d][first];
    31|       |
-   32|  3.05M|            return ray & ~cut;
-   33|  3.05M|        }
+   32|  3.03M|            return ray & ~cut;
+   33|  3.03M|        }
 _ZN5aleph5chess6detail17rayAttackBackwardEmNS1_9DirectionENS0_6SquareE:
-   41|  3.05M|                                                                  Square sq) {
-   42|  3.05M|            DEBUG_ASSERT(d == S || d == W || d == SE || d == SW);
-   43|  3.05M|            uint64_t ray      = attackTables.rays[d][sq];
-   44|  3.05M|            uint64_t blockers = ray & occ;
+   41|  3.03M|                                                                  Square sq) {
+   42|  3.03M|            DEBUG_ASSERT(d == S || d == W || d == SE || d == SW);
+   43|  3.03M|            uint64_t ray      = attackTables.rays[d][sq];
+   44|  3.03M|            uint64_t blockers = ray & occ;
    45|       |
-   46|  3.05M|            auto first        = static_cast<Square>(63 - platform::lzcnt(blockers | 1ULL));
-   47|  3.05M|            uint64_t cut      = attackTables.rays[d][first];
+   46|  3.03M|            auto first        = static_cast<Square>(63 - platform::lzcnt(blockers | 1ULL));
+   47|  3.03M|            uint64_t cut      = attackTables.rays[d][first];
    48|       |
-   49|  3.05M|            return ray & ~cut;
-   50|  3.05M|        }
+   49|  3.03M|            return ray & ~cut;
+   50|  3.03M|        }
 _ZN5aleph5chess6detail11rookAttacksENS0_6SquareEm:
-   64|   754k|        [[nodiscard]] inline constexpr uint64_t rookAttacks(Square sq, uint64_t occ) {
-   65|   754k|            return rayAttackForward(occ, N, sq) | rayAttackBackward(occ, S, sq) |
-   66|   754k|                   rayAttackForward(occ, E, sq) | rayAttackBackward(occ, W, sq);
-   67|   754k|        }
+   64|   749k|        [[nodiscard]] inline constexpr uint64_t rookAttacks(Square sq, uint64_t occ) {
+   65|   749k|            return rayAttackForward(occ, N, sq) | rayAttackBackward(occ, S, sq) |
+   66|   749k|                   rayAttackForward(occ, E, sq) | rayAttackBackward(occ, W, sq);
+   67|   749k|        }
 
 _ZN5aleph5chess4MoveC2Ev:
    48|  18.7M|            constexpr inline Move() : data(0) {}
 _ZN5aleph5chess4MoveC2ENS0_6SquareES2_NS0_9PieceTypeE:
-   42|  5.42k|                : data(from | (to << 6) | (promo << 12)) {
-   43|  5.42k|                DEBUG_ASSERT(promo != PieceType::NONE);
+   42|  5.19k|                : data(from | (to << 6) | (promo << 12)) {
+   43|  5.19k|                DEBUG_ASSERT(promo != PieceType::NONE);
    44|       |                DEBUG_ASSERT(promo != PieceType::KING);
-   45|  5.42k|            }
+   45|  5.19k|            }
 _ZN5aleph5chess4MoveC2ENS0_6SquareES2_:
-   38|  1.36M|            constexpr inline Move(Square from, Square to) : data(from | (to << 6)) {}
+   38|  1.35M|            constexpr inline Move(Square from, Square to) : data(from | (to << 6)) {}
 _ZNK5aleph5chess4Move4fromEv:
-   51|  1.39M|            [[nodiscard]] constexpr inline Square from() const noexcept { return data & 0x003F; }
+   51|  1.38M|            [[nodiscard]] constexpr inline Square from() const noexcept { return data & 0x003F; }
 _ZNK5aleph5chess4Move2toEv:
-   54|  1.39M|            [[nodiscard]] constexpr inline Square to() const noexcept {
-   55|  1.39M|                return (data >> 6) & 0x003F;
-   56|  1.39M|            }
+   54|  1.38M|            [[nodiscard]] constexpr inline Square to() const noexcept {
+   55|  1.38M|                return (data >> 6) & 0x003F;
+   56|  1.38M|            }
 _ZNK5aleph5chess4Move8hasPromoEv:
    71|  24.4k|            [[nodiscard]] constexpr inline bool hasPromo() const noexcept {
    72|  24.4k|                return (data >> 12) != 0;
    73|  24.4k|            }
 _ZNK5aleph5chess4Move5promoEv:
-   62|    225|            [[nodiscard]] inline PieceType promo() const noexcept {
-   63|    225|                return PieceType((data >> 12) & 0x000F);
-   64|    225|            }
+   62|    214|            [[nodiscard]] inline PieceType promo() const noexcept {
+   63|    214|                return PieceType((data >> 12) & 0x000F);
+   64|    214|            }
 
 _ZN5aleph5chess8MoveListILm512EEC2Ev:
    41|  24.4k|            constexpr MoveList() noexcept : _size(0) {}
 _ZN5aleph5chess8MoveListILm512EEpLERKNS0_4MoveE:
-  131|  1.36M|            constexpr inline MoveList<Capacity>& operator+=(const Move& m) noexcept {
-  132|  1.36M|                push_back(m);
-  133|  1.36M|                return *this;
-  134|  1.36M|            }
+  131|  1.35M|            constexpr inline MoveList<Capacity>& operator+=(const Move& m) noexcept {
+  132|  1.35M|                push_back(m);
+  133|  1.35M|                return *this;
+  134|  1.35M|            }
 _ZN5aleph5chess8MoveListILm512EE9push_backERKNS0_4MoveE:
-   90|  1.36M|            constexpr inline void push_back(const Move& m) noexcept {
+   90|  1.35M|            constexpr inline void push_back(const Move& m) noexcept {
    91|       |                DEBUG_ASSERT(_size < Capacity);
-   92|  1.36M|                _moves[_size++] = m;
-   93|  1.36M|            }
+   92|  1.35M|                _moves[_size++] = m;
+   93|  1.35M|            }
 _ZN5aleph5chess8MoveListILm256EEC2Ev:
    41|  24.4k|            constexpr MoveList() noexcept : _size(0) {}
 _ZN5aleph5chess8MoveListILm512EE5beginEv:
@@ -1280,15 +1280,15 @@ _ZN5aleph5chess8MoveListILm512EE3endEv:
   102|  24.4k|                return _moves.begin() + _size;
   103|  24.4k|            }
 _ZN5aleph5chess8MoveListILm256EEpLERKNS0_4MoveE:
-  131|   719k|            constexpr inline MoveList<Capacity>& operator+=(const Move& m) noexcept {
-  132|   719k|                push_back(m);
-  133|   719k|                return *this;
-  134|   719k|            }
+  131|   715k|            constexpr inline MoveList<Capacity>& operator+=(const Move& m) noexcept {
+  132|   715k|                push_back(m);
+  133|   715k|                return *this;
+  134|   715k|            }
 _ZN5aleph5chess8MoveListILm256EE9push_backERKNS0_4MoveE:
-   90|   719k|            constexpr inline void push_back(const Move& m) noexcept {
+   90|   715k|            constexpr inline void push_back(const Move& m) noexcept {
    91|       |                DEBUG_ASSERT(_size < Capacity);
-   92|   719k|                _moves[_size++] = m;
-   93|   719k|            }
+   92|   715k|                _moves[_size++] = m;
+   93|   715k|            }
 _ZNK5aleph5chess8MoveListILm256EE5emptyEv:
    49|  24.4k|            [[nodiscard]] constexpr inline bool empty() const noexcept { return _size == 0; }
 _ZN5aleph5chess8MoveListILm256EEixEm:
@@ -1300,51 +1300,51 @@ _ZNK5aleph5chess8MoveListILm256EE4sizeEv:
    46|  24.4k|            [[nodiscard]] constexpr inline std::size_t size() const noexcept { return _size; }
 
 _ZN5aleph5chess5PieceC2Ec:
-   67|  15.3k|            constexpr explicit Piece(char c) : data(0) {
-   68|  15.3k|                auto pos = detail::PIECE_TYPE_CHARS.find(c);
+   67|  15.2k|            constexpr explicit Piece(char c) : data(0) {
+   68|  15.2k|                auto pos = detail::PIECE_TYPE_CHARS.find(c);
    69|       |                DEBUG_ASSERT(pos != std::string_view::npos);
-   70|  15.3k|                data = static_cast<uint8_t>(pos);
-   71|  15.3k|            }
+   70|  15.2k|                data = static_cast<uint8_t>(pos);
+   71|  15.2k|            }
 _ZNK5aleph5chess5Piece7isBlackEv:
-   79|  15.3k|            [[nodiscard]] constexpr inline bool isBlack() const noexcept { return data >= 6; }
+   79|  15.2k|            [[nodiscard]] constexpr inline bool isBlack() const noexcept { return data >= 6; }
 _ZNK5aleph5chess5Piece4typeEv:
-   74|  1.40M|            [[nodiscard]] constexpr inline PieceType type() const noexcept {
-   75|  1.40M|                return data == NONE ? NONE : static_cast<PieceType>(data % 6);
+   74|  1.39M|            [[nodiscard]] constexpr inline PieceType type() const noexcept {
+   75|  1.39M|                return data == NONE ? NONE : static_cast<PieceType>(data % 6);
   ------------------
-  |  Branch (75:24): [True: 0, False: 1.40M]
+  |  Branch (75:24): [True: 0, False: 1.39M]
   ------------------
-   76|  1.40M|            }
+   76|  1.39M|            }
 _ZN5aleph5chess5PieceC2ENS0_9PieceTypeEb:
-   60|  2.18M|                : data(static_cast<uint8_t>(type + (6 * isBlack))) {}
+   60|  2.16M|                : data(static_cast<uint8_t>(type + (6 * isBlack))) {}
 _ZNK5aleph5chess5PiececvhEv:
-   92|   789k|            constexpr inline operator std::uint8_t() const noexcept { return data; }
+   92|   783k|            constexpr inline operator std::uint8_t() const noexcept { return data; }
 
 _ZN5aleph5chess6SquareC2Ehh:
-   56|   241k|            constexpr Square(std::uint8_t r, std::uint8_t f) : data(r * 8 + f) {
-   57|   241k|                DEBUG_ASSERT(r < 8);
+   56|   240k|            constexpr Square(std::uint8_t r, std::uint8_t f) : data(r * 8 + f) {
+   57|   240k|                DEBUG_ASSERT(r < 8);
    58|       |                DEBUG_ASSERT(f < 8);
-   59|   241k|            }
+   59|   240k|            }
 _ZNK5aleph5chess6SquarecvhEv:
-   82|  19.3M|            constexpr inline operator std::uint8_t() const noexcept { return data; }
+   82|  19.2M|            constexpr inline operator std::uint8_t() const noexcept { return data; }
 _ZN5aleph5chess6SquareC2Eh:
-   50|  11.9M|            constexpr Square(std::uint8_t d) : data(d) { DEBUG_ASSERT(d < 64); }
+   50|  11.8M|            constexpr Square(std::uint8_t d) : data(d) { DEBUG_ASSERT(d < 64); }
 _ZNK5aleph5chess6Square4rankEv:
-   62|   374k|            [[nodiscard]] constexpr inline std::uint8_t rank() const noexcept { return data >> 3; }
+   62|   375k|            [[nodiscard]] constexpr inline std::uint8_t rank() const noexcept { return data >> 3; }
 _ZNK5aleph5chess6Square4fileEv:
    65|   400k|            [[nodiscard]] constexpr inline std::uint8_t file() const noexcept { return data & 7; }
 
 LLVMFuzzerTestOneInput:
-   13|    479|extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-   14|    479|    if (size < 1) return 0;
+   13|    478|extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+   14|    478|    if (size < 1) return 0;
   ------------------
-  |  Branch (14:9): [True: 0, False: 479]
+  |  Branch (14:9): [True: 0, False: 478]
   ------------------
    15|       |
-   16|    479|    Board b{};
+   16|    478|    Board b{};
    17|       |
    18|  24.9k|    for (size_t i = 0; i < size; i++) {
   ------------------
-  |  Branch (18:24): [True: 24.4k, False: 478]
+  |  Branch (18:24): [True: 24.4k, False: 477]
   ------------------
    19|  24.4k|        auto moves = b.getLegalMoves();
    20|  24.4k|        if (moves.empty()) break;
@@ -1378,17 +1378,17 @@ LLVMFuzzerTestOneInput:
   ------------------
    30|  24.4k|    }
    31|       |
-   32|    479|    return 0;
-   33|    479|}
+   32|    478|    return 0;
+   33|    478|}
 
 _ZN5aleph8platform5tzcntEm:
-   86|  5.32M|    [[nodiscard]] constexpr auto tzcnt(std::uint64_t val) noexcept -> std::uint64_t {
-   87|  5.32M|        return std::countr_zero(val);
-   88|  5.32M|    }
+   86|  5.29M|    [[nodiscard]] constexpr auto tzcnt(std::uint64_t val) noexcept -> std::uint64_t {
+   87|  5.29M|        return std::countr_zero(val);
+   88|  5.29M|    }
 _ZN5aleph8platform5lzcntEm:
-   75|  3.05M|    [[nodiscard]] constexpr auto lzcnt(std::uint64_t val) noexcept -> std::uint64_t {
-   76|  3.05M|        return std::countl_zero(val);
-   77|  3.05M|    }
+   75|  3.03M|    [[nodiscard]] constexpr auto lzcnt(std::uint64_t val) noexcept -> std::uint64_t {
+   76|  3.03M|        return std::countl_zero(val);
+   77|  3.03M|    }
 _ZN5aleph8platform6popcntEm:
    64|   178k|    [[nodiscard]] constexpr auto popcnt(std::uint64_t val) noexcept -> std::uint64_t {
    65|   178k|        return std::popcount(val);
